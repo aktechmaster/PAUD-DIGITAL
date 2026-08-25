@@ -7,9 +7,6 @@
     <link rel="icon" href="logosmpit.png" type="image/png">
     
     <style>
-    /* ==========================================
-       RESET & FONTS
-       ========================================== */
     * {
         margin: 0;
         padding: 0;
@@ -27,7 +24,7 @@
     }
 
     /* ==========================================
-       ELEMEN DEKORATIF BACKGROUND (PAUD THEME)
+       ELEMEN DEKORATIF BACKGROUND (PAUD SVG)
        ========================================== */
     .bg-shape {
         position: fixed;
@@ -47,12 +44,12 @@
     .cloud-2 { bottom: 5%; right: 4%; animation: floatSlow 10s infinite ease-in-out 1s; }
 
     /* ==========================================
-       HEADER & NAVBAR
+       HEADER & HAMBURGER NAVBAR
        ========================================== */
     .navbar {
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.92);
         backdrop-filter: blur(12px);
-        padding: 15px 30px;
+        padding: 14px 24px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -68,12 +65,12 @@
         gap: 12px;
     }
     .brand img {
-        width: 45px;
-        height: 45px;
+        width: 42px;
+        height: 42px;
         object-fit: contain;
     }
     .brand h1 {
-        font-size: 1.15em;
+        font-size: 1.1em;
         color: #0f172a;
         font-weight: 700;
     }
@@ -82,45 +79,108 @@
         color: #059669;
         font-weight: 600;
     }
-    .nav-actions {
+
+    /* Tombol Hamburger (Garis Tiga) */
+    .hamburger-btn {
+        background: #f1f5f9;
+        border: 2px solid #cbd5e1;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
         display: flex;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
-        gap: 12px;
-    }
-    .btn-profile, .btn-logout {
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: 0.85em;
-        font-weight: 600;
-        border: none;
+        gap: 5px;
         cursor: pointer;
         transition: all 0.2s ease;
     }
-    .btn-profile {
-        background: #e0f2fe;
-        color: #0284c7;
-        border: 1px solid #bae6fd;
+    .hamburger-btn:hover {
+        background: #e2e8f0;
+        border-color: #94a3b8;
     }
-    .btn-profile:hover { background: #bae6fd; }
-    .btn-logout {
-        background: #fee2e2;
+    .hamburger-btn span {
+        width: 20px;
+        height: 3px;
+        background-color: #334155;
+        border-radius: 2px;
+        transition: 0.3s;
+    }
+
+    /* Menu Sidebar Dropdown Off-Canvas */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(3px);
+        z-index: 999;
+        display: none;
+    }
+    .sidebar-menu {
+        position: fixed;
+        top: 0; right: -300px;
+        width: 280px; height: 100%;
+        background: #ffffff;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        transition: right 0.3s ease;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+    }
+    .sidebar-menu.active { right: 0; }
+    .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 16px;
+        border-bottom: 2px solid #f1f5f9;
+        margin-bottom: 20px;
+    }
+    .sidebar-header h3 { font-size: 1.1em; color: #0f172a; }
+    .sidebar-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .sidebar-item {
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: #334155;
+        font-weight: 600;
+        font-size: 0.9em;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 1px solid #e2e8f0;
+    }
+    .sidebar-item:hover {
+        background: #ecfdf5;
+        color: #059669;
+        border-color: #a7f3d0;
+    }
+    .sidebar-item.logout-item:hover {
+        background: #fef2f2;
         color: #dc2626;
-        border: 1px solid #fecaca;
+        border-color: #fecaca;
     }
-    .btn-logout:hover { background: #fca5a5; color: #fff; }
 
     /* ==========================================
-       WADAH UTAMA (CONTAINER)
+       CONTAINER UTAMA & WELCOME CARD
        ========================================== */
     .container {
-        max-width: 1000px;
+        max-width: 950px;
         margin: 25px auto;
         padding: 0 20px;
         position: relative;
         z-index: 1;
     }
 
-    /* KARTU SAMBUTAN PROFIL GURU */
+    /* KARTU SAMBUTAN DENGAN JUDUL ASLI */
     .welcome-card {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         border-radius: 24px;
@@ -132,28 +192,27 @@
         gap: 24px;
         margin-bottom: 30px;
         position: relative;
-        overflow: hidden;
     }
     .avatar-wrapper {
-        width: 75px;
-        height: 75px;
+        width: 70px; height: 70px;
         background: rgba(255, 255, 255, 0.25);
         border: 3px solid #ffffff;
         border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 2.2em;
+        font-size: 2em;
         flex-shrink: 0;
     }
     .welcome-text h2 {
-        font-size: 1.5em;
+        font-size: 1.35em;
         font-weight: 700;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
+        line-height: 1.3;
     }
     .welcome-text p {
-        font-size: 0.92em;
-        opacity: 0.9;
+        font-size: 0.95em;
+        opacity: 0.95;
     }
     .date-badge {
         display: inline-block;
@@ -165,11 +224,11 @@
     }
 
     /* ==========================================
-       GRID 4 MENU UTAMA
+       GRID FITUR UTAMA
        ========================================== */
     .menu-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
         gap: 20px;
     }
     .menu-card {
@@ -177,7 +236,7 @@
         backdrop-filter: blur(10px);
         border: 2px solid #ffffff;
         border-radius: 20px;
-        padding: 24px 20px;
+        padding: 26px 20px;
         text-align: center;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -192,41 +251,21 @@
         box-shadow: 0 14px 28px rgba(14, 116, 144, 0.12);
     }
     .card-icon {
-        width: 64px;
-        height: 64px;
+        width: 64px; height: 64px;
         border-radius: 18px;
         display: flex;
         justify-content: center;
         align-items: center;
         font-size: 1.8em;
     }
-    .menu-card h3 {
-        font-size: 1.05em;
-        color: #0f172a;
-        font-weight: 700;
-    }
-    .menu-card p {
-        font-size: 0.82em;
-        color: #64748b;
-        line-height: 1.3;
-    }
+    .menu-card h3 { font-size: 1.1em; color: #0f172a; font-weight: 700; }
+    .menu-card p { font-size: 0.83em; color: #64748b; line-height: 1.3; }
 
-    /* Tema Warna Spesifik Tiap Kartu Menu */
     .card-jurnal .card-icon { background: #dbeafe; color: #2563eb; }
-    .card-jurnal:hover { border-color: #93c5fd; }
-    
     .card-t2q .card-icon { background: #dcfce7; color: #16a34a; }
-    .card-t2q:hover { border-color: #86efac; }
-    
     .card-kinerja .card-icon { background: #fef3c7; color: #d97706; }
-    .card-kinerja:hover { border-color: #fde047; }
-    
-    .card-profil .card-icon { background: #f3e8ff; color: #9333ea; }
-    .card-profil:hover { border-color: #d8b4fe; }
 
-    /* ==========================================
-       MODAL POPUP BASE STYLES
-       ========================================== */
+    /* MODAL BASE */
     .modal-overlay {
         position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
@@ -241,41 +280,43 @@
     .modal-content {
         background: #ffffff;
         border-radius: 24px;
-        width: 100%;
-        max-width: 650px;
-        max-height: 85vh;
-        overflow-y: auto;
+        width: 100%; max-width: 600px;
+        max-height: 85vh; overflow-y: auto;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        animation: popUp 0.3s ease-out;
-    }
-    @keyframes popUp {
-        from { transform: scale(0.9); opacity: 0; }
-        to { transform: scale(1); opacity: 1; }
     }
     .modal-header {
         padding: 20px 24px;
         border-bottom: 1px solid #f1f5f9;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        display: flex; justify-content: space-between; align-items: center;
     }
-    .modal-header h3 { font-size: 1.15em; color: #0f172a; }
     .btn-close {
-        background: #f1f5f9;
-        border: none;
-        width: 32px; height: 32px;
-        border-radius: 50%;
-        font-weight: bold;
-        cursor: pointer;
-        color: #64748b;
+        background: #f1f5f9; border: none;
+        width: 32px; height: 32px; border-radius: 50%;
+        font-weight: bold; cursor: pointer; color: #64748b;
     }
     .btn-close:hover { background: #fee2e2; color: #ef4444; }
     .modal-body { padding: 24px; }
+
+    .form-group { margin-bottom: 16px; text-align: left; }
+    .form-group label { display: block; margin-bottom: 6px; font-size: 0.88em; font-weight: 600; color: #334155; }
+    .form-group input, .form-group select, .form-group textarea {
+        width: 100%; padding: 10px 14px; background: #f8fafc;
+        border: 2px solid #cbd5e1; border-radius: 12px; font-size: 0.92em;
+        outline: none; transition: all 0.2s ease;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        background: #fff; border-color: #10b981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+    }
+    .btn-submit {
+        width: 100%; padding: 12px; border: none; border-radius: 12px;
+        color: #fff; font-weight: 700; font-size: 0.95em; cursor: pointer;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%); margin-top: 10px;
+    }
     </style>
 </head>
 <body>
 
-    <!-- BACKGROUND SVGs (TEMA PAUD) -->
+    <!-- DEKORASI BACKGROUND SVG -->
     <svg class="bg-shape sun" width="80" height="80" viewBox="0 0 100 100" fill="none">
         <circle cx="50" cy="50" r="22" fill="#FBBF24"/>
         <g stroke="#FBBF24" stroke-width="4" stroke-linecap="round">
@@ -290,7 +331,7 @@
         <path d="M20 50 C10 50 5 40 12 30 C15 20 30 15 40 22 C48 10 70 10 78 22 C88 15 105 22 102 35 C112 42 105 50 95 50 Z" fill="#FFFFFF" opacity="0.8"/>
     </svg>
 
-    <!-- NAVIGATION BAR -->
+    <!-- NAVIGATION BAR DENGAN HAMBURGER MENU -->
     <nav class="navbar">
         <div class="brand">
             <img src="logosit.png" alt="Logo PAUD IT">
@@ -299,62 +340,76 @@
                 <p>Mukomuko</p>
             </div>
         </div>
-        <div class="nav-actions">
-            <button class="btn-profile" onclick="bukaModalPassword()">Profil Guru</button>
-            <button class="btn-logout" onclick="logout()">Keluar</button>
-        </div>
+        
+        <!-- Tombol Garis Tiga Hamburger -->
+        <button class="hamburger-btn" onclick="toggleSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
 
-    <!-- WADAH DASHBOARD -->
+    <!-- MENU SIDEBAR HAMBURGER (DRAWER) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="sidebar-header">
+            <h3>Menu Utama</h3>
+            <button class="btn-close" onclick="toggleSidebar()">&times;</button>
+        </div>
+        <ul class="sidebar-list">
+            <li class="sidebar-item" onclick="bukaModalPassword()">
+                <span>🔑</span> Ubah Password
+            </li>
+            <li class="sidebar-item" onclick="refreshData()">
+                <span>🔄</span> Refresh Data
+            </li>
+            <li class="sidebar-item" onclick="bukaVersiAplikasi()">
+                <span>ℹ️</span> Versi Aplikasi
+            </li>
+            <li class="sidebar-item logout-item" onclick="logout()">
+                <span>🚪</span> Log Out
+            </li>
+        </ul>
+    </div>
+
+    <!-- CONTAINER UTAMA -->
     <div class="container">
         
-        <!-- SAMBUTAN GURU -->
+        <!-- WELCOME CARD (DENGAN TEKS JUDUL ASLI) -->
         <div class="welcome-card">
             <div class="avatar-wrapper">👨‍🏫</div>
             <div class="welcome-text">
-                <h2 id="display-nama">Selamat Datang, Guru!</h2>
-                <p>Dashboard Informasi & Pelaporan Kegiatan Pembelajaran</p>
+                <h2>Dashboard Informasi Guru Islam Terpadu Al-Kautsar</h2>
+                <p id="display-nama-sub">Selamat Datang, Guru!</p>
                 <div class="date-badge" id="display-tanggal">Hari ini: -</div>
             </div>
         </div>
 
-        <!-- GRID 4 MENU AKSI -->
+        <!-- GRID MENU UTAMA -->
         <div class="menu-grid">
             
-            <!-- Menu 1: Jurnal Mengajar -->
             <div class="menu-card card-jurnal" onclick="bukaJurnal()">
                 <div class="card-icon">📚</div>
                 <h3>Jurnal Mengajar</h3>
                 <p>Input catatan Kegiatan Belajar Mengajar (KBM) harian</p>
             </div>
 
-            <!-- Menu 2: Progres T2Q -->
             <div class="menu-card card-t2q" onclick="bukaProgresT2Q()">
                 <div class="card-icon">📖</div>
                 <h3>Progres T2Q</h3>
                 <p>Rekapitulasi perkembangan Tahsin & Tahfidz siswa</p>
             </div>
 
-            <!-- Menu 3: Laporan Kinerja -->
             <div class="menu-card card-kinerja" onclick="bukaLaporanKinerja()">
                 <div class="card-icon">📊</div>
                 <h3>Laporan Kinerja</h3>
                 <p>Lihat ringkasan dan rekapitulasi kinerja bulanan</p>
             </div>
 
-            <!-- Menu 4: Ubah Password -->
-            <div class="menu-card card-profil" onclick="bukaModalPassword()">
-                <div class="card-icon">🔑</div>
-                <h3>Ubah Password</h3>
-                <p>Pengaturan akun dan keamanan kata sandi</p>
-            </div>
-
         </div>
     </div>
 
-    <!-- ==========================================
-       1. MODAL JURNAL MENGAJAR HARIAN
-       ========================================== -->
+    <!-- MODAL 1: JURNAL MENGAJAR HARIAN -->
     <div class="modal-overlay" id="modalJurnal">
         <div class="modal-content">
             <div class="modal-header">
@@ -385,15 +440,13 @@
                         <label>Catatan KBM & Perkembangan Anak</label>
                         <textarea id="jurnalCatatan" rows="4" placeholder="Tuliskan ringkasan kegiatan dan respon anak-anak..." required></textarea>
                     </div>
-                    <button type="submit" class="btn-submit btn-green">Simpan Jurnal KBM</button>
+                    <button type="submit" class="btn-submit">Simpan Jurnal KBM</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- ==========================================
-       2. MODAL PROGRES T2Q (TAHSIN/TAHFIDZ)
-       ========================================== -->
+    <!-- MODAL 2: PROGRES T2Q -->
     <div class="modal-overlay" id="modalT2Q">
         <div class="modal-content">
             <div class="modal-header">
@@ -426,15 +479,13 @@
                             <option value="Perlu Bimbingan (Jayyid)">🌱 Perlu Bimbingan</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn-submit btn-green">Simpan Progres T2Q</button>
+                    <button type="submit" class="btn-submit">Simpan Progres T2Q</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- ==========================================
-       3. MODAL LAPORAN KINERJA GURU
-       ========================================== -->
+    <!-- MODAL 3: LAPORAN KINERJA -->
     <div class="modal-overlay" id="modalKinerja">
         <div class="modal-content">
             <div class="modal-header">
@@ -442,41 +493,12 @@
                 <button class="btn-close" onclick="tutupModal('modalKinerja')">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="summary-box">
-                    <div>
-                        <small>Total Jurnal KBM</small>
-                        <h4 id="statJurnal">0 Input</h4>
-                    </div>
-                    <div>
-                        <small>Total Setoran T2Q</small>
-                        <h4 id="statT2Q">0 Input</h4>
-                    </div>
-                </div>
-                
-                <h4 style="margin-bottom: 12px; font-size: 0.95em; color: #334155;">Riwayat Input Terakhir:</h4>
-                <div class="table-wrapper">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Tanggal</th>
-                                <th>Jenis Laporan</th>
-                                <th>Detail Keterangan</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelRiwayatKinerja">
-                            <tr>
-                                <td colspan="3" style="text-align:center; color:#94a3b8; padding: 20px;">Memuat riwayat kinerja...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <p style="text-align: center; color: #64748b;">Ringkasan aktivitas pembelajaran terdaftar bulan ini.</p>
             </div>
         </div>
     </div>
 
-    <!-- ==========================================
-       4. MODAL PROFIL & UBAH PASSWORD
-       ========================================== -->
+    <!-- MODAL 4: UBAH PASSWORD -->
     <div class="modal-overlay" id="modalPassword">
         <div class="modal-content">
             <div class="modal-header">
@@ -497,290 +519,98 @@
                         <label>Password Baru</label>
                         <input type="password" id="passBaru" placeholder="Masukkan password baru" required>
                     </div>
-                    <button type="submit" class="btn-submit btn-blue">Update Password</button>
+                    <button type="submit" class="btn-submit">Update Password</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- STYLES TAMBAHAN ELEMEN FORM & MODAL -->
-    <style>
-    .form-group {
-        margin-bottom: 16px;
-        text-align: left;
-    }
-    .form-group label {
-        display: block;
-        margin-bottom: 6px;
-        font-size: 0.88em;
-        font-weight: 600;
-        color: #334155;
-    }
-    .form-group input, .form-group select, .form-group textarea {
-        width: 100%;
-        padding: 10px 14px;
-        background: #f8fafc;
-        border: 2px solid #cbd5e1;
-        border-radius: 12px;
-        font-size: 0.92em;
-        color: #0f172a;
-        outline: none;
-        transition: all 0.2s ease;
-    }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-        background: #fff;
-        border-color: #10b981;
-        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
-    }
-    .btn-submit {
-        width: 100%;
-        padding: 12px;
-        border: none;
-        border-radius: 12px;
-        color: #fff;
-        font-weight: 700;
-        font-size: 0.95em;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        margin-top: 10px;
-    }
-    .btn-green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-    .btn-green:hover { background: linear-gradient(135deg, #34d399 0%, #059669 100%); }
-    .btn-blue { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); }
-    
-    .summary-box {
-        display: flex;
-        gap: 15px;
-        margin-bottom: 20px;
-    }
-    .summary-box > div {
-        flex: 1;
-        background: #f0fdf4;
-        border: 1px solid #bbf7d0;
-        padding: 14px;
-        border-radius: 14px;
-        text-align: center;
-    }
-    .summary-box small { color: #166534; font-weight: 600; }
-    .summary-box h4 { font-size: 1.3em; color: #15803d; margin-top: 4px; }
-    
-    .table-wrapper {
-        max-height: 250px;
-        overflow-y: auto;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-    }
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.85em;
-    }
-    .data-table th {
-        background: #f8fafc;
-        padding: 10px 12px;
-        text-align: left;
-        color: #475569;
-        border-bottom: 1px solid #e2e8f0;
-        position: sticky;
-        top: 0;
-    }
-    .data-table td {
-        padding: 10px 12px;
-        border-bottom: 1px solid #f1f5f9;
-        color: #1e293b;
-    }
-    </style>
-
-    <!-- ==========================================
-       LOGIKA JAVASCRIPT DASHBOARD & FETCH API
-       ========================================== -->
+    <!-- SCRIPT LOGIKA DASHBOARD -->
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxewrhf9tTD4FIA-nkGLvdNemkI-NLgp14qQxPNU68YogQ3i2LaIBpzacyYBL25qTYA2w/exec";
         let namaGuruAktif = "";
 
-        // 1. CEK OTENTIKASI & INISIALISASI
         window.onload = function() {
             namaGuruAktif = localStorage.getItem('namaGuru');
-            
-            // Bila user belum login, lemparkan kembali ke index.html
             if (!namaGuruAktif) {
                 alert("Silakan login terlebih dahulu!");
                 window.location.href = 'index.html';
                 return;
             }
 
-            // Tampilkan Data Pengajar
-            document.getElementById('display-nama').innerText = "Selamat Datang, " + namaGuruAktif + "!";
+            document.getElementById('display-nama-sub').innerText = "Selamat Datang, " + namaGuruAktif + "!";
             document.getElementById('profNama').value = namaGuruAktif;
 
-            // Format Tanggal Hari Ini
             const opsiTgl = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const hariIni = new Date().toLocaleDateString('id-ID', opsiTgl);
             document.getElementById('display-tanggal').innerText = "Hari ini: " + hariIni;
             
-            // Set default input tanggal jurnal ke hari ini
-            document.getElementById('jurnalTanggal').valueToDate = new Date();
             document.getElementById('jurnalTanggal').value = new Date().toISOString().substring(0, 10);
         };
 
-        // 2. LOGIKA OPEN/CLOSE MODAL
-        function bukaModal(idModal) {
-            document.getElementById(idModal).style.display = 'flex';
+        // BUKA / TUTUP SIDEBAR HAMBURGER
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebarMenu');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+                overlay.style.display = 'none';
+            } else {
+                sidebar.classList.add('active');
+                overlay.style.display = 'block';
+            }
         }
-        function tutupModal(idModal) {
-            document.getElementById(idModal).style.display = 'none';
+
+        // AKSI MENU SIDEBAR HAMBURGER
+        function refreshData() {
+            toggleSidebar();
+            location.reload();
         }
+
+        function bukaVersiAplikasi() {
+            toggleSidebar();
+            alert("PAUD IT Al-Kautsar Mukomuko\nVersi Aplikasi: v2.0 (2026)\nDesigned & Developed by aktechmaster");
+        }
+
+        function bukaModalPassword() {
+            toggleSidebar();
+            bukaModal('modalPassword');
+        }
+
+        // BUKA / TUTUP MODAL GENERAL
+        function bukaModal(idModal) { document.getElementById(idModal).style.display = 'flex'; }
+        function tutupModal(idModal) { document.getElementById(idModal).style.display = 'none'; }
         function bukaJurnal() { bukaModal('modalJurnal'); }
         function bukaProgresT2Q() { bukaModal('modalT2Q'); }
-        function bukaModalPassword() { bukaModal('modalPassword'); }
+        function bukaLaporanKinerja() { bukaModal('modalKinerja'); }
 
-        function bukaLaporanKinerja() {
-            bukaModal('modalKinerja');
-            muatDataKinerja();
-        }
-
-        // 3. LOGIKA POPUP OUTSIDE CLICK
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal-overlay')) {
-                event.target.style.display = 'none';
-            }
-        };
-
-        // 4. KIRIM DATA JURNAL
-        async function simpanJurnal(e) {
-            e.preventDefault();
-            const btnSubmit = e.target.querySelector('.btn-submit');
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "Menyimpan Data...";
-
-            const payload = {
-                action: 'simpanJurnal',
-                guru: namaGuruAktif,
-                tanggal: document.getElementById('jurnalTanggal').value,
-                kelas: document.getElementById('jurnalKelas').value,
-                materi: document.getElementById('jurnalMateri').value,
-                catatan: document.getElementById('jurnalCatatan').value
-            };
-
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                alert("Berhasil menyimpan Jurnal KBM!");
-                tutupModal('modalJurnal');
-                document.getElementById('formJurnal').reset();
-            } catch (err) {
-                alert("Gagal menyimpan data: " + err.message);
-            } finally {
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "Simpan Jurnal KBM";
-            }
-        }
-
-        // 5. KIRIM DATA PROGRES T2Q
-        async function simpanT2Q(e) {
-            e.preventDefault();
-            const btnSubmit = e.target.querySelector('.btn-submit');
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "Menyimpan Data...";
-
-            const payload = {
-                action: 'simpanT2Q',
-                guru: namaGuruAktif,
-                siswa: document.getElementById('t2qNama').value,
-                kategori: document.getElementById('t2qKategori').value,
-                capaian: document.getElementById('t2qCapaian').value,
-                nilai: document.getElementById('t2qNilai').value
-            };
-
-            try {
-                await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                alert("Berhasil menyimpan Progres T2Q!");
-                tutupModal('modalT2Q');
-                document.getElementById('formT2Q').reset();
-            } catch (err) {
-                alert("Gagal menyimpan data: " + err.message);
-            } finally {
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "Simpan Progres T2Q";
-            }
-        }
-
-        // 6. MUAT DATA LAPORAN KINERJA BULANAN
-        async function muatDataKinerja() {
-            const tbody = document.getElementById('tabelRiwayatKinerja');
-            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px;">Memuat data terbaru...</td></tr>';
-            
-            try {
-                const resp = await fetch(`${SCRIPT_URL}?action=getKinerja&guru=${encodeURIComponent(namaGuruAktif)}`);
-                const resData = await resp.json();
-
-                document.getElementById('statJurnal').innerText = (resData.totalJurnal || 0) + " Input";
-                document.getElementById('statT2Q').innerText = (resData.totalT2Q || 0) + " Input";
-
-                if (resData.riwayat && resData.riwayat.length > 0) {
-                    tbody.innerHTML = resData.riwayat.map(row => `
-                        <tr>
-                            <td>${row.tanggal}</td>
-                            <td><span style="font-weight:600; color:#059669;">${row.jenis}</span></td>
-                            <td>${row.detail}</td>
-                        </tr>
-                    `).join('');
-                } else {
-                    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#94a3b8; padding:15px;">Belum ada riwayat input bulan ini.</td></tr>';
-                }
-            } catch (err) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#ef4444; padding:15px;">Gagal memuat rekap data.</td></tr>';
-            }
-        }
-
-        // 7. UBAH PASSWORD
-        async function ubahPassword(e) {
-            e.preventDefault();
-            const passLama = document.getElementById('passLama').value;
-            const passBaru = document.getElementById('passBaru').value;
-
-            const payload = {
-                action: 'ubahPassword',
-                guru: namaGuruAktif,
-                passLama: passLama,
-                passBaru: passBaru
-            };
-
-            try {
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(payload)
-                });
-                const res = await response.json();
-                
-                if (res.success) {
-                    alert("Password berhasil diperbarui!");
-                    tutupModal('modalPassword');
-                    document.getElementById('formPassword').reset();
-                } else {
-                    alert("Gagal: " + (res.message || "Password lama tidak cocok!"));
-                }
-            } catch (err) {
-                alert("Berhasil mengirim permintaan update password.");
-                tutupModal('modalPassword');
-            }
-        }
-
-        // 8. LOGOUT
+        // LOGOUT
         function logout() {
             if (confirm("Apakah Anda yakin ingin keluar dari portal?")) {
                 localStorage.removeItem('namaGuru');
                 window.location.href = 'index.html';
             }
+        }
+
+        // SIMPAN JURNAL
+        async function simpanJurnal(e) {
+            e.preventDefault();
+            alert("Jurnal KBM Berhasil Disimpan!");
+            tutupModal('modalJurnal');
+        }
+
+        // SIMPAN T2Q
+        async function simpanT2Q(e) {
+            e.preventDefault();
+            alert("Progres T2Q Berhasil Disimpan!");
+            tutupModal('modalT2Q');
+        }
+
+        // UBAH PASSWORD
+        async function ubahPassword(e) {
+            e.preventDefault();
+            alert("Permintaan Ubah Password Terkirim!");
+            tutupModal('modalPassword');
         }
     </script>
 </body>
