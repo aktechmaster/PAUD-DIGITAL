@@ -7,7 +7,7 @@
     
     <link rel="icon" href="logosmpit.png" type="image/png">
     <style>
-    /* Reset dasar */
+    /* Reset Dasar */
     * {
         margin: 0;
         padding: 0;
@@ -16,8 +16,8 @@
     }
 
     body {
-        /* PERUBAHAN: Latar belakang gradasi krem hangat ke hijau sangat lembut */
-        background: linear-gradient(135deg, #fdfbf7 0%, #f4f4e9 50%, #e0e5d6 100%);
+        /* Latar belakang gradasi langit cerah & hangat khas anak-anak */
+        background: linear-gradient(135deg, #e0f2fe 0%, #fef9c3 50%, #dcfce7 100%);
         height: 100vh;
         display: flex;
         justify-content: center;
@@ -26,151 +26,248 @@
         position: relative;
     }
 
-    /* Elemen dekoratif latar belakang (lingkaran cahaya) */
+    /* ==========================================
+       DEKORASI SVG KANAK-KANAK & ANIMASI 
+       ========================================== */
+    .bg-shape {
+        position: absolute;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    /* Animasi Melayang (Floating) */
+    @keyframes floatSlow {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-12px) rotate(3deg); }
+    }
+    @keyframes floatFast {
+        0%, 100% { transform: translateY(0px) scale(1); }
+        50% { transform: translateY(-18px) scale(1.05); }
+    }
+    @keyframes pulseSun {
+        0%, 100% { transform: scale(1) rotate(0deg); }
+        50% { transform: scale(1.1) rotate(10deg); }
+    }
+
+    /* Posisi Elemen Dekoratif */
+    .sun { top: 6%; right: 8%; animation: pulseSun 12s infinite ease-in-out; }
+    .cloud-1 { top: 12%; left: 6%; animation: floatSlow 7s infinite ease-in-out; }
+    .cloud-2 { bottom: 8%; right: 6%; animation: floatSlow 9s infinite ease-in-out 1s; }
+    .star-1 { top: 22%; right: 24%; animation: floatFast 5s infinite ease-in-out; }
+    .star-2 { bottom: 18%; left: 8%; animation: floatFast 6s infinite ease-in-out 2s; }
+    .balloon { bottom: 10%; left: 4%; animation: floatSlow 8s infinite ease-in-out; }
+
+    /* Circle Glow Lembut */
     .circle {
         position: absolute;
         border-radius: 50%;
-        opacity: 0.6; /* Opacity dinaikkan sedikit untuk latar terang */
-        filter: blur(80px);
+        opacity: 0.5;
+        filter: blur(60px);
         z-index: 0;
     }
-    /* PERUBAHAN: Lingkaran kiri atas (Hijau Sage lembut) */
-    .c1 { 
-        width: 300px; height: 300px; top: 10%; left: 20%; 
-        background: linear-gradient(to right, #d4e0c9, #a3b18a);
-    }
-    /* PERUBAHAN: Lingkaran kanan bawah (Krem/Earth tone) */
-    .c2 { 
-        width: 250px; height: 250px; bottom: 10%; right: 20%; 
-        background: linear-gradient(to right, #faedcd, #e9edc9); 
-    }
+    .c1 { width: 320px; height: 320px; top: 5%; left: 15%; background: #bae6fd; }
+    .c2 { width: 300px; height: 300px; bottom: 5%; right: 15%; background: #fef08a; }
 
-    /* Wadah Login (Efek Glassmorphism Terang) */
+    /* ==========================================
+       WADAH LOGIN (GLASSMORPHISM CERAH & CERIA)
+       ========================================== */
     .login-container {
-        /* PERUBAHAN: Efek kaca disesuaikan jadi lebih putih/terang */
-        background: rgba(255, 255, 255, 0.65);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.9);
-        border-radius: 20px;
-        padding: 40px;
-        width: 400px;
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 3px solid #ffffff;
+        border-radius: 28px;
+        padding: 36px 32px;
+        width: 410px;
         text-align: center;
-        /* PERUBAHAN: Bayangan diubah ke nuansa hijau gelap transparan */
-        box-shadow: 0 15px 35px rgba(88, 129, 87, 0.1);
+        box-shadow: 0 20px 40px rgba(14, 116, 144, 0.12),
+                    0 2px 10px rgba(255, 255, 255, 0.8) inset;
         z-index: 1;
-        /* PERUBAHAN: Warna teks utama diubah menjadi Hijau Tua/Abu Gelap */
-        color: #344e41; 
+        color: #1e3a8a;
+        position: relative;
     }
 
     /* Wadah Logo */
     .-container {
-        margin: 0 auto 20px;
+        margin: 0 auto 16px;
         text-align: center;
     }
     
-    /* Gaya Gambar Logo */
     .-img {
-        width: 80px;
-        height: 80px;
+        width: 85px;
+        height: 85px;
         object-fit: contain; 
-        /* PERUBAHAN: Drop shadow disesuaikan untuk latar terang */
-        filter: drop-shadow(0 5px 10px rgba(88, 129, 87, 0.2)); 
+        filter: drop-shadow(0 6px 12px rgba(16, 185, 129, 0.25)); 
+        transition: transform 0.3s ease;
+    }
+    .-img:hover {
+        transform: scale(1.08) rotate(-3deg);
     }
 
     h2 {
-        margin-bottom: 5px;
-        font-weight: 600;
-        letter-spacing: 1px;
+        margin-bottom: 6px;
+        font-weight: 700;
+        font-size: 1.25em;
+        letter-spacing: 0.3px;
+        color: #0f172a;
     }
     
     p.subtitle {
-        font-size: 0.9em;
-        /* PERUBAHAN: Warna subtitle menjadi hijau pucat elegan */
-        color: #588157; 
-        margin-bottom: 30px;
+        font-size: 0.95em;
+        font-weight: 600;
+        color: #059669; 
+        margin-bottom: 26px;
+        background: #ecfdf5;
+        display: inline-block;
+        padding: 4px 14px;
+        border-radius: 20px;
+        border: 1px solid #a7f3d0;
     }
 
     /* Input Form */
     .input-group {
         position: relative;
-        margin-bottom: 20px;
+        margin-bottom: 18px;
         text-align: left;
     }
 
     .input-group label {
         display: block;
-        margin-bottom: 8px;
-        font-size: 0.9em;
-        /* PERUBAHAN: Warna teks label */
-        color: #4a5d4e; 
+        margin-bottom: 6px;
+        font-size: 0.88em;
+        font-weight: 600;
+        color: #334155; 
     }
 
     .input-group input {
         width: 100%;
-        padding: 12px 15px;
-        /* PERUBAHAN: Latar belakang input sedikit putih */
-        background: rgba(255, 255, 255, 0.8);
-        border: 1px solid rgba(163, 177, 138, 0.6);
-        border-radius: 8px;
-        /* PERUBAHAN: Teks input pengguna */
-        color: #2b3a30; 
-        font-size: 1em;
+        padding: 12px 16px;
+        background: #f8fafc;
+        border: 2px solid #cbd5e1;
+        border-radius: 12px;
+        color: #0f172a; 
+        font-size: 0.95em;
         outline: none;
-        transition: 0.3s;
+        transition: all 0.25s ease;
     }
 
     .input-group input:focus {
         background: #ffffff;
-        /* PERUBAHAN: Efek glowing saat fokus jadi hijau lembut */
-        border-color: #588157;
-        box-shadow: 0 0 10px rgba(88, 129, 87, 0.2);
+        border-color: #10b981;
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
     }
 
-    /* Tombol Login */
+    /* Tombol Login Ceria */
     .btn-login {
         width: 100%;
-        padding: 12px;
-        /* PERUBAHAN: Gradasi tombol jadi hijau segar/daun */
-        background: linear-gradient(to right, #8a9a5b, #588157);
+        padding: 13px;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         border: none;
-        border-radius: 8px;
-        color: #fff;
+        border-radius: 12px;
+        color: #ffffff;
         font-size: 1em;
-        font-weight: bold;
+        font-weight: 700;
+        letter-spacing: 0.5px;
         cursor: pointer;
-        transition: transform 0.2s, box-shadow 0.2s;
-        margin-top: 10px;
+        transition: all 0.25s ease;
+        margin-top: 8px;
+        box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
     }
 
     .btn-login:hover {
         transform: translateY(-2px);
-        /* PERUBAHAN: Bayangan hijau saat di-hover */
-        box-shadow: 0 5px 15px rgba(88, 129, 87, 0.3);
+        box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
+        background: linear-gradient(135deg, #34d399 0%, #059669 100%);
     }
 
-    /* Footer kecil */
+    .btn-login:active {
+        transform: translateY(0);
+    }
+
+    /* Footer */
     .footer {
-        margin-top: 20px;
+        margin-top: 22px;
         font-size: 0.8em;
-        /* PERUBAHAN: Warna footer lebih tegas dari latar */
-        color: rgba(52, 78, 65, 0.7);
+        color: #64748b;
+        line-height: 1.4;
+    }
+    .footer span {
+        font-weight: 600;
+        color: #047857;
     }
     
     /* Pesan Error */
     #error-msg {
-        color: #d9534f;
-        font-size: 0.9em;
+        color: #ef4444;
+        font-size: 0.88em;
+        font-weight: 600;
         margin-top: 10px;
         display: none;
+        background: #fef2f2;
+        padding: 6px 10px;
+        border-radius: 8px;
+        border: 1px solid #fecaca;
     }
-</style>
+
+    /* Animasi Shake Error */
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        20%, 60% { transform: translateX(-8px); }
+        40%, 80% { transform: translateX(8px); }
+    }
+    </style>
 </head>
 <body>
 
+    <!-- Circle Glow Background -->
     <div class="circle c1"></div>
     <div class="circle c2"></div>
 
+    <!-- ELEMEN DEKORATIF SVG KANAK-KANAK -->
+    <!-- Matahari Ceria -->
+    <svg class="bg-shape sun" width="100" height="100" viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="50" r="22" fill="#FBBF24"/>
+        <g stroke="#FBBF24" stroke-width="4" stroke-linecap="round">
+            <line x1="50" y1="12" x2="50" y2="20"/>
+            <line x1="50" y1="80" x2="50" y2="88"/>
+            <line x1="12" y1="50" x2="20" y2="50"/>
+            <line x1="80" y1="50" x2="88" y2="50"/>
+            <line x1="23" y1="23" x2="29" y2="29"/>
+            <line x1="71" y1="71" x2="77" y2="77"/>
+            <line x1="23" y1="77" x2="29" y2="71"/>
+            <line x1="71" y1="29" x2="77" y2="23"/>
+        </g>
+    </svg>
+
+    <!-- Awan 1 (Kiri Atas) -->
+    <svg class="bg-shape cloud-1" width="120" height="70" viewBox="0 0 120 70" fill="none">
+        <path d="M20 50 C10 50 5 40 12 30 C15 20 30 15 40 22 C48 10 70 10 78 22 C88 15 105 22 102 35 C112 42 105 50 95 50 Z" fill="#FFFFFF" opacity="0.95"/>
+    </svg>
+
+    <!-- Awan 2 (Kanan Bawah) -->
+    <svg class="bg-shape cloud-2" width="140" height="80" viewBox="0 0 120 70" fill="none">
+        <path d="M20 50 C10 50 5 40 12 30 C15 20 30 15 40 22 C48 10 70 10 78 22 C88 15 105 22 102 35 C112 42 105 50 95 50 Z" fill="#FFFFFF" opacity="0.85"/>
+    </svg>
+
+    <!-- Bintang Kanan -->
+    <svg class="bg-shape star-1" width="40" height="40" viewBox="0 0 24 24" fill="#FCD34D">
+        <path d="M12 2L14.89 8.26L22 9.27L16.88 14.14L18.18 21.02L12 17.77L5.82 21.02L7.12 14.14L2 9.27L9.11 8.26L12 2Z"/>
+    </svg>
+
+    <!-- Bintang Kiri -->
+    <svg class="bg-shape star-2" width="32" height="32" viewBox="0 0 24 24" fill="#6EE7B7">
+        <path d="M12 2L14.89 8.26L22 9.27L16.88 14.14L18.18 21.02L12 17.77L5.82 21.02L7.12 14.14L2 9.27L9.11 8.26L12 2Z"/>
+    </svg>
+
+    <!-- Balon Udara Kiri Bawah -->
+    <svg class="bg-shape balloon" width="55" height="75" viewBox="0 0 60 80" fill="none">
+        <path d="M30 5 C15 5 5 18 5 32 C5 48 22 58 30 62 C38 58 55 48 55 32 C55 18 45 5 30 5 Z" fill="#F472B6"/>
+        <path d="M22 62 L38 62 L35 70 L25 70 Z" fill="#F59E0B"/>
+        <line x1="24" y1="62" x2="26" y2="70" stroke="#78350F" stroke-width="1.5"/>
+        <line x1="36" y1="62" x2="34" y2="70" stroke="#78350F" stroke-width="1.5"/>
+    </svg>
+
+    <!-- CONTAINER UTAMA LOGIN -->
     <div class="login-container">
         <div class="-container">
             <img src="logosit.png" alt="Logo IT" class="logo-img">
@@ -268,7 +365,7 @@
                 
                 // Animasi tombol sukses
                 btnLogin.innerHTML = "Berhasil Masuk...";
-                btnLogin.style.background = "linear-gradient(to right, #11998e, #38ef7d)";
+                btnLogin.style.background = "linear-gradient(135deg, #10b981, #059669)";
                 
                 // Redirect setelah 1 detik
                 setTimeout(() => {
@@ -285,5 +382,4 @@
     </script>
 
 </body>
-
 </html>
