@@ -597,7 +597,7 @@
 }
 </style>
 
-                  
+                    
             <div id="menu-absensi-siswa" class="menu-card" style="display: none;" onclick="cekAksesAbsensi()">
                 <h3>📝 Jurnal Kehadiran Siswa</h3>
                 <p>Input kehadiran siswa.</p>
@@ -913,7 +913,38 @@
             &copy; 2026 <span> PAUD IT Al-Kautsar Mukomuko </span> | Designed & Developed by aktechmaster
     </div>
 
-    <div id="modalPassword" class="modal">
+    <div id="modalPeringatan" class="modal">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <span class="close-btn" onclick="tutupPeringatan()" style="position: absolute; right: 20px; top: 10px;">&times;</span>
+            
+            <div style="margin: 20px 0;">
+                <div style="width: 80px; height: 80px; background: #ffebee; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 40px; color: #f44336;">🔒</span>
+                </div>
+            </div>
+
+            <h2 style="color: #333; margin-bottom: 10px;">Akses Dibatasi</h2>
+            <p style="color: #666; font-size: 1.1em; line-height: 1.5;">
+                Maaf, menu ini khusus untuk<br>
+                <strong>Wali Kelas</strong> & <strong>Wakil Wali Kelas</strong>.
+            </p>
+            
+            <button onclick="tutupPeringatan()" style="background: #f44336; color: white; border: none; padding: 10px 25px; border-radius: 20px; font-size: 1em; margin-top: 20px; cursor: pointer; transition: 0.3s;">
+                Mengerti
+            </button>
+        </div>
+    </div>
+
+    <div id="infoPopup" class="custom-popup">
+    <div class="popup-box">
+        <div id="popup-icon" class="popup-icon-box">ℹ️</div>
+        <h3 id="popup-title" style="color: #333; margin-bottom: 10px;">Judul</h3>
+        <p id="popup-message" style="color: #666; line-height: 1.5;">Pesan...</p>
+        <button class="btn-popup-ok" onclick="closeInfoPopup()">Siap!</button>
+    </div>
+</div>
+
+<div id="modalPassword" class="modal">
     <div class="modal-content" style="max-width: 400px;">
         <div class="modal-header">
             <h2>Ganti Password</h2>
@@ -1736,66 +1767,6 @@ function showDate() {
 }
 showDate();
 
-// ==========================================
-// LOGIKA JADWAL MENGAJAR
-// ==========================================
-window.bukaJadwalMengajar = function() {
-    if (!dataDariSpreadsheet) {
-        if(typeof showPopup === "function") showPopup("Mohon Tunggu", "Data sedang diambil dari server...", "⏳");
-        else alert("Data sedang diambil dari server...");
-        return;
-    }
-
-    const modal = document.getElementById("modalJadwal");
-    const listContainer = document.getElementById("list-jadwal");
-    const divKosong = document.getElementById("jadwal-kosong");
-    const judulHari = document.getElementById("info-hari");
-    const judulModal = document.getElementById("judul-jadwal");
-
-    const hariIndo = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-    const tgl = new Date();
-    const namaHari = hariIndo[tgl.getDay()]; 
-    
-    if (modal) modal.style.display = "block";
-    if (judulModal) judulModal.innerText = "Jadwal " + namaHari;
-    if (judulHari) judulHari.innerText = namaHari + ", " + tgl.toLocaleDateString('id-ID');
-    if (listContainer) listContainer.innerHTML = ""; 
-
-    const dataJadwalGuru = dataDariSpreadsheet.jadwalMengajar && dataDariSpreadsheet.jadwalMengajar[namaGuru];
-
-    if (dataJadwalGuru && dataJadwalGuru[namaHari] && dataJadwalGuru[namaHari].length > 0) {
-        if (divKosong) divKosong.style.display = "none";
-        
-        dataJadwalGuru[namaHari].forEach(function(mapel) {
-            let li = document.createElement("li");
-            li.style.background = "#fff";
-            li.style.borderLeft = "5px solid #3498db";
-            li.style.marginBottom = "10px";
-            li.style.padding = "12px";
-            li.style.borderRadius = "5px";
-            li.style.boxShadow = "0 2px 5px rgba(0,0,0,0.05)";
-            li.style.display = "flex";
-            li.style.alignItems = "center";
-            
-            li.innerHTML = `
-                <div style="margin-right: 15px; color: #3498db;">
-                    <i class="far fa-clock fa-lg"></i>
-                </div>
-                <div>
-                    <span style="font-weight:600; color:#2c3e50; font-size:1.05em;">${mapel}</span>
-                </div>
-            `;
-            if(listContainer) listContainer.appendChild(li);
-        });
-    } else {
-        if (divKosong) divKosong.style.display = "block";
-    }
-};
-
-window.tutupJadwal = function() {
-    const modal = document.getElementById("modalJadwal");
-    if(modal) modal.style.display = "none";
-};
 
 // ==========================================
 // LOGIKA UBAH PASSWORD
@@ -2003,7 +1974,6 @@ window.addEventListener('click', function(event) {
         { id: 'modalDetailAbsensi', close: window.tutupDetailAbsensi },
         { id: 'modalRincianJurnal', close: window.tutupRincianJurnal },
         { id: 'modalBiodata', close: window.tutupBiodata },
-        { id: 'modalJadwal', close: window.tutupJadwal },
         { id: 'modalPassword', close: window.tutupModalPassword },
         { id: 'modalPeringatan', close: window.tutupPeringatan }
     ];
