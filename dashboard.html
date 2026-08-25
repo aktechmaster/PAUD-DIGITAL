@@ -464,7 +464,7 @@
     <div class="navbar">
         <div class="brand">
             <img src="logosmpit.png" alt="Logo" class="navbar-logo">
-            SDIT Al-Kautsar
+            PAUD IT Al-Kautsar
         </div>
 
         <div id="display-tanggal" class="navbar-date"></div>
@@ -917,7 +917,7 @@
     </div>
     
     <div class="footer">
-            &copy; 2026 <span> SDIT Al-Kautsar Mukomuko </span> | Designed & Developed by aktechmaster
+            &copy; 2026 <span> PAUD IT Al-Kautsar Mukomuko </span> | Designed & Developed by aktechmaster
     </div>
 
     <div id="modalPeringatan" class="modal">
@@ -1219,7 +1219,7 @@ function closeInfoPopup() {
         // 2. KONFIGURASI API
         // ==========================================
         
-        const API_ = "https://script.google.com/macros/s/AKfycbyZKEYXblP_bpPvojEjemtvw0ozji2pp5wIv6igMSSdqj3ICm11F7BCr6NbqGzzfQxYfw/exec"; 
+        const API_ = "https://script.google.com/macros/s/AKfycbxewrhf9tTD4FIA-nkGLvdNemkI-NLgp14qQxPNU68YogQ3i2LaIBpzacyYBL25qTYA2w/exec"; 
 
         const namaGuru = localStorage.getItem('namaGuru'); 
 
@@ -1615,7 +1615,7 @@ async function bukaLaporan() {
             const semuaNilaiBiodataClean = bersihkanTotal(semuaNilaiBiodata);
             const daftarKelas = Object.keys(dataDariSpreadsheet.rekapKelas);
 
-            let kelasDitemukan = null;
+            let kelaemukan = null;
             let dataKelas = null;
 
             for (let i = 0; i < daftarKelas.length; i++) {
@@ -1623,13 +1623,13 @@ async function bukaLaporan() {
                 let namaKelasClean = bersihkanTotal(namaKelasAsli);
 
                 if (namaKelasClean && semuaNilaiBiodataClean.includes(namaKelasClean)) {
-                    kelasDitemukan = namaKelasAsli;
+                    kelaemukan = namaKelasAsli;
                     dataKelas = dataDariSpreadsheet.rekapKelas[namaKelasAsli];
                     break;
                 }
             }
 
-            if (kelasDitemukan && dataKelas) {
+            if (kelaemukan && dataKelas) {
                 if(divInput) {
                     divInput.style.display = 'block';
                     let jumlahIsi = parseInt(dataKelas.jumlahInput) || 0; 
@@ -1654,7 +1654,7 @@ async function bukaLaporan() {
                 }
 
                 if(divRekap) {
-                    window.kelasAktif = kelasDitemukan;
+                    window.kelasAktif = kelaemukan;
                     divRekap.style.display = 'block';
                     
                     const elLabel = document.getElementById('label-rekap-kelas');
