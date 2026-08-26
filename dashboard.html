@@ -1494,7 +1494,7 @@ window.bukaPopupAbsensi = function() {
     var tbody = document.getElementById('isiTabelAbsensi');
     if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="padding:20px; text-align:center;">Sedang mengambil data... <br>⏳ Mohon tunggu...</td></tr>';
 
-    var urlTujuan = "https://script.google.com/macros/s/AKfycbwqC7MvEayos9s8IdYbcoXF488iQ09-LneUD0DvawKUf6AYIUWPOaI0NvMfNEMQP6JVBA/exec";
+    var urlTujuan = "https://script.google.com/macros/s/AKfycbzHyerhed86e0Y4MUXADzKHGORsiC1W-7jEjW_CexfsbEuzBEC23dOXNCChKPn0NvKL/exec"; //<================== URL INI AMBIL DARI 3. JURNAL KEHADIRAN SISWA
     var fullUrl = urlTujuan + "?action=getRekapDetail&kelas=" + encodeURIComponent(kelas);
     
     fetch(fullUrl)
