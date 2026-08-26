@@ -1144,7 +1144,7 @@ window.tutupLaporan = function() {
 };
 
 // ============================================
-// FUNGSI BUKA LAPORAN
+// FUNGSI BUKA LAPORAN (PERBAIKAN)
 // ============================================
 window.bukaLaporan = async function() {
     await fetchData(); 
@@ -1159,7 +1159,7 @@ window.bukaLaporan = async function() {
     }
 
     const modal = document.getElementById("modalLaporanKinerja") || document.getElementById("modalLaporan");
-    if (modal) modal.style.display = "block";
+    if (modal) modal.style.display = "block"; 
     
     // BAGIAN 1: JURNAL HARIAN
     const dataHarian = dataDariSpreadsheet.jurnalHarian?.[namaGuru];
@@ -1199,9 +1199,10 @@ window.bukaLaporan = async function() {
         elBarBulanan.style.width = "0%";
     }
 
-    // SUNTIK TOMBOL "LIHAT RINCIAN" JURNAL BULANAN REGULER
+    // SUNTIK TOMBOL "LIHAT RINCIAN" (PERBAIKAN SELECTOR FALLBACK)
     if (elValBulanan) {
-        const cardJurnal = elValBulanan.closest('.card-item');
+        // Jika .card-item tidak ditemukan, gunakan parentElement sebagai fallback
+        const cardJurnal = elValBulanan.closest('.card-item') || elValBulanan.parentElement;
         if (cardJurnal && !cardJurnal.querySelector('.btn-rincian-jurnal')) {
             const linkRincian = document.createElement('a');
             linkRincian.className = 'btn-rincian-jurnal';
@@ -1233,7 +1234,7 @@ window.bukaLaporan = async function() {
         }
     }
 
-    // BAGIAN 5 & 6: STATUS INPUT & REKAP KELAS
+    // BAGIAN 5 & 6: STATUS INPUT & REKAP KELAS (PERBAIKAN PENCOCOKAN KELAS)
     const divInput = document.getElementById('card-status-input'); 
     const divRekap = document.getElementById('row-rekap-kelas');   
 
@@ -1256,9 +1257,12 @@ window.bukaLaporan = async function() {
         }
 
         if (infoGuru) {
-            const semuaNilaiBiodata = Object.values(infoGuru).join(" ");
-            const bersihkanTotal = s => String(s).toUpperCase().replace(/[^A-Z0-9]/g, '');
-            const semuaNilaiBiodataClean = bersihkanTotal(semuaNilaiBiodata);
+            // Pembersihan kata kunci formal untuk isolasi nama kelas
+            const bersihkanTotal = s => String(s).toUpperCase()
+                .replace(/WALI|GURU|KELAS|REKAP|UTAMA|TAMBAHAN/g, '')
+                .replace(/[^A-Z0-9]/g, '');
+
+            const semuaNilaiBiodataClean = bersihkanTotal(Object.values(infoGuru).join(" "));
             const daftarKelas = Object.keys(dataDariSpreadsheet.rekapKelas);
 
             let kelasDitemukan = null;
@@ -1268,7 +1272,8 @@ window.bukaLaporan = async function() {
                 let namaKelasAsli = daftarKelas[i]; 
                 let namaKelasClean = bersihkanTotal(namaKelasAsli);
 
-                if (namaKelasClean && semuaNilaiBiodataClean.includes(namaKelasClean)) {
+                // Evaluasi dua arah agar toleran terhadap variasi string ("KOBER PAUD 1" vs "KOBER 1")
+                if (namaKelasClean && (semuaNilaiBiodataClean.includes(namaKelasClean) || namaKelasClean.includes(semuaNilaiBiodataClean))) {
                     kelasDitemukan = namaKelasAsli;
                     dataKelas = dataDariSpreadsheet.rekapKelas[namaKelasAsli];
                     break;
