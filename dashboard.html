@@ -838,31 +838,7 @@
     </div>
 </div>
 
-    <!-- MODAL RINCIAN JURNAL T2Q -->
-<div id="modalRincianJurnalT2Q" class="modal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(3px);">
-    <div class="modal-content" style="background-color: #fff; margin: 5% auto; padding: 25px; border-radius: 12px; width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); position: relative;">
-        <span onclick="tutupRincianJurnalT2Q()" style="color: #7f8c8d; position: absolute; right: 20px; top: 15px; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
-
-        <h3 style="margin-bottom: 5px; color: #2c3e50; font-size: 1.3em;">Rekap Bulanan Jurnal T2Q</h3>
-        <p id="nama-guru-jurnal-t2q" style="margin-bottom: 20px; color: #16a085; font-weight: 600; font-size: 0.95em;"></p>
-
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 0.9em;">
-                <thead>
-                    <tr style="background: linear-gradient(to right, #8e44ad, #9b59b6); color: white;">
-                        <th style="padding: 12px 8px; border: 1px solid #ddd; border-top-left-radius: 8px;">Bulan</th>
-                        <th style="padding: 12px 8px; border: 1px solid #ddd;">Wajib Diisi</th>
-                        <th style="padding: 12px 8px; border: 1px solid #ddd;">Realisasi</th>
-                        <th style="padding: 12px 8px; border: 1px solid #ddd; border-top-right-radius: 8px;">Persen</th>
-                    </tr>
-                </thead>
-                <tbody id="tabel-body-jurnal-t2q">
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
+    
     <div id="modalDetailAbsensi" class="modal-overlay" style="display: none;">
   <div class="modal-box">
     <div class="modal-header">
@@ -952,178 +928,167 @@
 
 
     <script>
-
-        // Fungsi untuk memanggil Popup Cantik
+// ==========================================
+// POPUP & UTILITY FUNCTIONS
+// ==========================================
 function showPopup(title, message, icon) {
-    document.getElementById('popup-title').innerText = title;
-    // Menggunakan innerText agar \n terbaca sebagai baris baru, atau gunakan innerHTML jika mau <br>
-    document.getElementById('popup-message').innerText = message;
-    document.getElementById('popup-icon').innerText = icon;
-    
-    // Gunakan flex agar posisi benar-benar di tengah layar
-    document.getElementById('infoPopup').style.display = 'flex'; 
+    const elTitle = document.getElementById('popup-title');
+    const elMsg = document.getElementById('popup-message');
+    const elIcon = document.getElementById('popup-icon');
+    const elPopup = document.getElementById('infoPopup');
+
+    if (elTitle) elTitle.innerText = title;
+    if (elMsg) elMsg.innerText = message;
+    if (elIcon) elIcon.innerText = icon;
+    if (elPopup) elPopup.style.display = 'flex'; 
 }
 
 function closeInfoPopup() {
-    document.getElementById('infoPopup').style.display = 'none';
+    const elPopup = document.getElementById('infoPopup');
+    if (elPopup) elPopup.style.display = 'none';
 }
 
-        // Tutup popup jika klik di luar kotak (area gelap)
-        document.getElementById('infoPopup').addEventListener('click', function(e) {
+// Tutup popup jika klik di luar kotak (area gelap)
+const elPopupBox = document.getElementById('infoPopup');
+if (elPopupBox) {
+    elPopupBox.addEventListener('click', function(e) {
         if (e.target === this) {
-        closeInfoPopup();
+            closeInfoPopup();
         }   
-        });
+    });
+}
 
-        // ==========================================
-        // 1. KONFIGURASI & LOGIC MENU BARU
-        // ==========================================
-        
-        // --- LOGIC MENU DROPDOWN ---
-        function toggleMenu() {
-            document.getElementById("myDropdown").classList.toggle("show");
-        }
+// ==========================================
+// 1. KONFIGURASI & LOGIC MENU
+// ==========================================
+function toggleMenu() {
+    const dropdown = document.getElementById("myDropdown");
+    if (dropdown) dropdown.classList.toggle("show");
+}
 
-        // Tutup menu jika user klik di luar menu
-        window.onclick = function(event) {
-            if (!event.target.matches('.dropbtn')) {
-                var dropdowns = document.getElementsByClassName("dropdown-content");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
-                }
+// Tutup menu jika user klik di luar menu
+window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
             }
-            
-            // Logic tutup modal
-            const modalLaporan = document.getElementById("modalLaporan");
-            const modalBiodata = document.getElementById("modalBiodata");
-            const modalPeringatan = document.getElementById("modalPeringatan");
-            
-            if (event.target == modalLaporan) tutupLaporan();
-            if (event.target == modalBiodata) tutupBiodata();
-            if (event.target == modalPeringatan) tutupPeringatan();
         }
+    }
+};
 
-        // --- LOGIC SMART REFRESH ---
-        function manualRefresh() {
-        console.log("Melakukan refresh data manual...");
-    
-         // Kita panggil ulang fetchData
-         fetchData().then(() => {
-        // GANTI ALERT BIASA DENGAN POPUP BARU
+function manualRefresh() {
+    console.log("Melakukan refresh data manual...");
+    fetchData().then(() => {
         showPopup("Berhasil!", "Data Dashboard sudah diperbarui ke versi terbaru.", "✅");
-         });
-        }
+    });
+}
 
-        // ==========================================
-        // 2. KONFIGURASI API
-        // ==========================================
+// ==========================================
+// 2. KONFIGURASI API & FETCH DATA
+// ==========================================
+const API_ = "https://script.google.com/macros/s/AKfycbxewrhf9tTD4FIA-nkGLvdNemkI-NLgp14qQxPNU68YogQ3i2LaIBpzacyYBL25qTYA2w/exec"; 
+
+const namaGuru = localStorage.getItem('namaGuru'); 
+
+if (!namaGuru) {
+    alert("Anda harus login terlebih dahulu!");
+    window.location.href = 'index.html';
+} else {
+    const elNamaGuru = document.getElementById('nama-guru');
+    if (elNamaGuru) elNamaGuru.innerText = namaGuru;
+}
+
+let dataDariSpreadsheet = null;
+
+async function fetchData() {
+    const loadingScreen = document.getElementById('loading-overlay');
+    if (loadingScreen) loadingScreen.style.display = 'flex';
+
+    try {
+        console.log("Sedang mengambil data...");
+        const response = await fetch(API_);
+        const data = await response.json();
         
-        const API_ = "https://script.google.com/macros/s/AKfycbxewrhf9tTD4FIA-nkGLvdNemkI-NLgp14qQxPNU68YogQ3i2LaIBpzacyYBL25qTYA2w/exec"; 
-
-        const namaGuru = localStorage.getItem('namaGuru'); 
-
-        if (!namaGuru) {
-            alert("Anda harus login terlebih dahulu!");
-            window.location.href = 'index.html';
-        } else {
-            document.getElementById('nama-guru').innerText = namaGuru;
-        }
-
-        let dataDariSpreadsheet = null;
-
-        async function fetchData() {
-            const loadingScreen = document.getElementById('loading-overlay');
-            loadingScreen.style.display = 'flex';
-
-            try {
-                console.log("Sedang mengambil data...");
-                const response = await fetch(API_);
-                const data = await response.json();
-                
-                dataDariSpreadsheet = data; 
-                console.log("Data berhasil diambil:", dataDariSpreadsheet);
-                
-                updateHeaderDashboard();
-
-            } catch (error) {
-                console.error("Gagal mengambil data:", error);
-                alert("Gagal terhubung ke Database. Cek koneksi internet.");
-            } finally {
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 500);
-            }
-        }
-
-        fetchData();
+        dataDariSpreadsheet = data; 
+        console.log("Data berhasil diambil:", dataDariSpreadsheet);
         
-        // ==========================================
+        updateHeaderDashboard();
+
+    } catch (error) {
+        console.error("Gagal mengambil data:", error);
+        alert("Gagal terhubung ke Database. Cek koneksi internet.");
+    } finally {
+        if (loadingScreen) {
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        }
+    }
+}
+
+fetchData();
+
+// ==========================================
 // FUNGSI UPDATE HEADER & FOTO
 // ==========================================
 function updateHeaderDashboard() {
-    // 1. Cek Data
     if (!dataDariSpreadsheet || !dataDariSpreadsheet.biodata[namaGuru]) {
-        document.getElementById('dash-jabatan').innerText = "Data Belum Tersedia";
+        const elDashJabatan = document.getElementById('dash-jabatan');
+        if (elDashJabatan) elDashJabatan.innerText = "Data Belum Tersedia";
         return;
     }
     
-    // 2. Definisi Variabel 'bio' (Hanya hidup di dalam fungsi ini)
     const bio = dataDariSpreadsheet.biodata[namaGuru];
     
     let teksJabatan = bio.jabatan || "-";
-    if(bio.tugasTambahan && bio.tugasTambahan !== "" && bio.tugasTambahan !== "-") {
+    if (bio.tugasTambahan && bio.tugasTambahan !== "" && bio.tugasTambahan !== "-") {
         teksJabatan = teksJabatan + " | " + bio.tugasTambahan;
     }
-    document.getElementById('dash-jabatan').innerText = teksJabatan;
-    document.getElementById('dash-nip').innerText = "NIPY: " + (bio.nip || "-");
+
+    const elDashJabatan = document.getElementById('dash-jabatan');
+    const elDashNip = document.getElementById('dash-nip');
+    if (elDashJabatan) elDashJabatan.innerText = teksJabatan;
+    if (elDashNip) elDashNip.innerText = "NIPY: " + (bio.nip || "-");
 
     const imgElement = document.getElementById('dash-foto');
     const defaultFoto = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"; 
 
     let rawLink = bio.foto; 
 
-    if (rawLink && rawLink.trim() !== "") {
-        if (rawLink.includes("drive.google.com")) {
-            const idMatch = rawLink.match(/\/d\/([a-zA-Z0-9_-]+)/) || rawLink.match(/id=([a-zA-Z0-9_-]+)/);
-            if (idMatch && idMatch[1]) {
-                imgElement.src = "https://drive.google.com/thumbnail?sz=w1000&id=" + idMatch[1];
+    if (imgElement) {
+        if (rawLink && rawLink.trim() !== "") {
+            if (rawLink.includes("drive.google.com")) {
+                const idMatch = rawLink.match(/\/d\/([a-zA-Z0-9_-]+)/) || rawLink.match(/id=([a-zA-Z0-9_-]+)/);
+                if (idMatch && idMatch[1]) {
+                    imgElement.src = "https://drive.google.com/thumbnail?sz=w1000&id=" + idMatch[1];
+                } else {
+                    imgElement.src = rawLink; 
+                }
             } else {
                 imgElement.src = rawLink; 
             }
         } else {
-            imgElement.src = rawLink; 
+            imgElement.src = defaultFoto;
         }
-    } else {
-        imgElement.src = defaultFoto;
     }
 
-    // ==========================================
-    // --- LOGIKA MENU KHUSUS WAKA ---
-    // ==========================================
-    
-    // Definisi tombol (ambil ID dari HTML yang baru dibuat)
+    // LOGIKA MENU KHUSUS WAKA
     const tombolAbsenKaryawan = document.getElementById('menu-absensi-karyawan');
     const tombolNotulen = document.getElementById('menu-notulen-rapat');
 
-    // Kita gunakan variabel 'cekDataGuru' yang sudah ada logic-nya di bawah
-    // Tapi karena variabel 'cekDataGuru' didefinisikan sedikit ke bawah di kode asli Anda, 
-    // Kita buat ulang string pengecekannya di sini agar aman:
-    let stringCekJabatan = (bio.jabatan + " " + bio.tugasTambahan).toUpperCase();
+    let stringCekJabatan = ((bio.jabatan || "") + " " + (bio.tugasTambahan || "")).toUpperCase();
 
-    // 1. Cek Waka Kurikulum ATAU Ketua Paralel
     if (tombolAbsenKaryawan) {
-        // Mengecek apakah string mengandung "KURIKULUM" ATAU "KETUA PARALEL"
         if (stringCekJabatan.includes("KURIKULUM") || stringCekJabatan.includes("KETUA PARALEL")) {
-        tombolAbsenKaryawan.style.display = "block";
+            tombolAbsenKaryawan.style.display = "block";
         } else {
             tombolAbsenKaryawan.style.display = "none";
         }
     }
 
-    // 2. Cek Waka Humas
     if (tombolNotulen) {
         if (stringCekJabatan.includes("HUMAS")) {
             tombolNotulen.style.display = "block";
@@ -1132,129 +1097,58 @@ function updateHeaderDashboard() {
         }
     }
 
-    // ==========================================
-    // --- LOGIKA MENU KHUSUS PIKET (WAKA KURIKULUM & PMA) ---
-    // ==========================================
-    
-    // 1. Ambil Elemen Menu Baru
-    const tombolInputPiket = document.getElementById('menu-input-piket');
-    const tombolLaporanPiket = document.getElementById('menu-laporan-piket');
-
-    // 2. Cek Jabatan (Waka Kurikulum ATAU PMA)
-    // Variabel 'stringCekJabatan' sudah didefinisikan di kode sebelumnya (baris atas fungsi ini)
-    // Jadi kita tinggal pakai saja.
-    
-    if (tombolInputPiket && tombolLaporanPiket) {
-        // Cek apakah string jabatan mengandung kata "KURIKULUM" atau "PMA"
-        if (stringCekJabatan.includes("KURIKULUM") || stringCekJabatan.includes("PMA")) {
-            tombolInputPiket.style.display = "block";
-            tombolLaporanPiket.style.display = "block";
-        } else {
-            tombolInputPiket.style.display = "none";
-            tombolLaporanPiket.style.display = "none";
-        }
-    }
-
-    // ==========================================
-    // --- LOGIKA MENU ABSENSI SISWA (KHUSUS WALI KELAS) ---
-    // ==========================================
-    
+    // LOGIKA MENU ABSENSI SISWA (KHUSUS WALI KELAS)
     const tombolAbsensiSiswa = document.getElementById('menu-absensi-siswa');
 
-if (tombolAbsensiSiswa) {
-    // 1. Daftar jabatan yang diizinkan melihat menu ini
-    const jabatanDiizinkan = ["WALI KELAS", "GURU KELAS"];
-    
-    const jabatanUpper = stringCekJabatan.toUpperCase();
-
-    // 2. Cek apakah salah satu kata kunci dari array ada di dalam 'stringCekJabatan'
-    const punyaAkses = jabatanDiizinkan.some(jabatan => jabatanUpper.includes(jabatan));
-
-    // 3. Tampilkan atau sembunyikan tombol
-    tombolAbsensiSiswa.style.display = punyaAkses ? "block" : "none";
+    if (tombolAbsensiSiswa) {
+        const jabatanDiizinkan = ["WALI KELAS", "GURU KELAS"];
+        const punyaAkses = jabatanDiizinkan.some(jabatan => stringCekJabatan.includes(jabatan));
+        tombolAbsensiSiswa.style.display = punyaAkses ? "block" : "none";
+    }
 }
-    // ==========================================
-// --- LOGIKA OTOMATIS MENU T2Q ---
+
 // ==========================================
-
-const tombolT2Q = document.getElementById('menu-t2q');
-
-if (tombolT2Q) { 
-    // Kita ganti sumber datanya menjadi bio.mataPelajaran
-    // Tambahkan fallback (|| "") agar tidak error (null) jika guru tersebut tidak punya mapel
-    let mapelGuru = (bio.mataPelajaran || "").toUpperCase();
-
-    // Pengecekan didasarkan pada variabel mapelGuru
-    if (mapelGuru.includes("T2Q") || mapelGuru.includes("TAHSIN") || mapelGuru.includes("TAHFIDZ")) {
-        tombolT2Q.style.display = "block"; 
-    } else {
-        tombolT2Q.style.display = "none"; 
+// LOGIKA CEK AKSES ABSENSI & MODAL PERINGATAN
+// ==========================================
+window.cekAksesAbsensi = function() {
+    if (!dataDariSpreadsheet) {
+        alert("Data sedang dimuat... Mohon tunggu sebentar.");
+        return;
     }
-}
 
-    // ==========================================
-    // --- LOGIKA OTOMATIS MENU BPI ---
-    // (SEKARANG SUDAH DI DALAM FUNGSI, JADI BISA BACA 'bio')
-    // ==========================================
-    const tombolBPI = document.getElementById('menu-bpi');
+    const bio = dataDariSpreadsheet.biodata[namaGuru];
+    let teksPengecekan = "";
     
-    // Pastikan tombol ada DAN data statusBPI terbaca
-    if (tombolBPI && bio.statusBPI) {
-        // Cek apakah isinya "Iya" (trim spasi & huruf kecilkan biar aman)
-        if (bio.statusBPI.toString().trim().toLowerCase() === "iya") {
-            tombolBPI.style.display = "flex"; 
-        } else {
-            // Tambahan biar aman: kalau bukan "Iya", sembunyikan
-            tombolBPI.style.display = "none"; 
-        }
+    if (bio) {
+        let jabatan = bio.jabatan || bio.jabatanUtama || ""; 
+        let tugas = bio.tugasTambahan || "";
+        teksPengecekan = (jabatan + " " + tugas).toLowerCase();
     }
 
-} // <--- KURUNG KURAWAL PENUTUP FUNGSI UTAMA (JANGAN DIHAPUS, INI BATAS AKHIR)
+    if (teksPengecekan.includes("wali kelas") || teksPengecekan.includes("guru kelas")) {
+        window.open("https://aktechmaster.github.io/SD_Junral_Kehadiran_Siswa/");
+    } else {
+        const modalPeringatan = document.getElementById("modalPeringatan");
+        if (modalPeringatan) modalPeringatan.style.display = "block";
+    }
+};
 
+window.tutupPeringatan = function() {
+    const modalPeringatan = document.getElementById("modalPeringatan");
+    if (modalPeringatan) modalPeringatan.style.display = "none";
+};
 
-        // ==========================================
-        // LOGIKA CEK AKSES ABSENSI
-        // ==========================================
-        function cekAksesAbsensi() {
-            if (!dataDariSpreadsheet) {
-                alert("Data sedang dimuat... Mohon tunggu sebentar.");
-                return;
-            }
+window.tutupLaporan = function() {
+    const modal = document.getElementById("modalLaporanKinerja") || document.getElementById("modalLaporan");
+    if (modal) modal.style.display = "none";
+};
 
-            const bio = dataDariSpreadsheet.biodata[namaGuru];
-            let teksPengecekan = "";
-            
-            if (bio) {
-                // AMANNYA: Kita gabungkan saja teks dari Jabatan Utama dan Tugas Tambahan
-                // (bio.jabatan / bio.jabatanUtama disesuaikan dengan pengiriman GS Anda)
-                let jabatan = bio.jabatan || bio.jabatanUtama || ""; 
-                let tugas = bio.tugasTambahan || "";
-                
-                // Jadikan huruf kecil semua agar mudah dicocokkan
-                teksPengecekan = (jabatan + " " + tugas).toLowerCase();
-            }
-
-            // PERUBAHAN: Cek apakah di teks tersebut ada kata "wali kelas" ATAU "guru kelas"
-            if (teksPengecekan.includes("wali kelas") || teksPengecekan.includes("guru kelas")) {
-                window.open("https://aktechmaster.github.io/SD_Junral_Kehadiran_Siswa/");
-            } else {
-                document.getElementById("modalPeringatan").style.display = "block";
-            }
-        }
-
-        function tutupPeringatan() {
-            document.getElementById("modalPeringatan").style.display = "none";
-        }
-
-
-        // ============================================
-// FUNGSI BUKA LAPORAN (FIX KELENGKAPAN RINCIAN)
 // ============================================
-async function bukaLaporan() {
-    // 1. Panggil data terbaru dari server
+// FUNGSI BUKA LAPORAN
+// ============================================
+window.bukaLaporan = async function() {
     await fetchData(); 
 
-    // 2. Cek keamanan jika fetch gagal
     if (!dataDariSpreadsheet) {
         if (typeof showPopup === "function") {
             showPopup("Gagal", "Gagal memuat data terbaru. Coba lagi.", "❌");
@@ -1264,11 +1158,10 @@ async function bukaLaporan() {
         return;
     }
 
-    // 3. Buka Modal Laporan
     const modal = document.getElementById("modalLaporanKinerja") || document.getElementById("modalLaporan");
     if (modal) modal.style.display = "block";
     
-    // --- BAGIAN 1: JURNAL HARIAN ---
+    // BAGIAN 1: JURNAL HARIAN
     const dataHarian = dataDariSpreadsheet.jurnalHarian?.[namaGuru];
     const elValHarian = document.getElementById("val-jurnal-harian");
     const elBarHarian = document.getElementById("bar-jurnal-harian");
@@ -1288,7 +1181,7 @@ async function bukaLaporan() {
         elBarHarian.style.width = "0%";
     }
 
-    // --- BAGIAN 2: JURNAL BULANAN REGULER ---
+    // BAGIAN 2: JURNAL BULANAN REGULER
     const dataBulanan = dataDariSpreadsheet.jurnalBulanan?.[namaGuru];
     const elValBulanan = document.getElementById("val-jurnal-bulanan");
     const elBarBulanan = document.getElementById("bar-jurnal-bulanan");
@@ -1306,7 +1199,7 @@ async function bukaLaporan() {
         elBarBulanan.style.width = "0%";
     }
 
-    // --- SUNTIK TOMBOL "LIHAT RINCIAN" JURNAL BULANAN REGULER ---
+    // SUNTIK TOMBOL "LIHAT RINCIAN" JURNAL BULANAN REGULER
     if (elValBulanan) {
         const cardJurnal = elValBulanan.closest('.card-item');
         if (cardJurnal && !cardJurnal.querySelector('.btn-rincian-jurnal')) {
@@ -1318,9 +1211,7 @@ async function bukaLaporan() {
             
             linkRincian.onclick = function(e) {
                 e.preventDefault();
-                if (typeof bukaRincianJurnal === 'function') {
-                    bukaRincianJurnal();
-                } else if (window.bukaRincianJurnal) {
+                if (typeof window.bukaRincianJurnal === 'function') {
                     window.bukaRincianJurnal();
                 }
             };
@@ -1328,54 +1219,7 @@ async function bukaLaporan() {
         }
     }
 
-    // --- BAGIAN 2B: JURNAL BULANAN T2Q ---
-    const elValT2Q = document.getElementById("val-jurnal-t2q");
-    const elBarT2Q = document.getElementById("bar-jurnal-t2q");
-    
-    let dataBulananT2Q = dataDariSpreadsheet.jurnalBulananT2Q?.[namaGuru];
-    
-    if (!dataBulananT2Q && dataDariSpreadsheet.rincianJurnalT2Q?.[namaGuru]) {
-        const listRincian = dataDariSpreadsheet.rincianJurnalT2Q[namaGuru];
-        const bulanAktif = listRincian.find(item => parseInt(item.wajib) > 0) || listRincian[0];
-        if (bulanAktif) {
-            dataBulananT2Q = {
-                target: parseInt(bulanAktif.wajib) || 0,
-                realisasi: parseInt(bulanAktif.realisasi) || 0
-            };
-        }
-    }
-
-    if (dataBulananT2Q && elValT2Q && elBarT2Q) {
-        let target = parseInt(dataBulananT2Q.target) || 0;
-        let realisasi = parseInt(dataBulananT2Q.realisasi) || 0;
-        let persen = 0;
-        if (target > 0) persen = Math.round((realisasi / target) * 100);
-
-        elValT2Q.innerText = persen + "% (" + realisasi + "/" + target + ")";
-        elBarT2Q.style.width = persen + "%";
-    } else if (elValT2Q && elBarT2Q) {
-        elValT2Q.innerText = "-";
-        elBarT2Q.style.width = "0%";
-    }
-
-    // --- BAGIAN 3: PIKET ---
-    const namaUserPiket = (typeof namaGuru !== 'undefined' ? namaGuru : localStorage.getItem('namaGuru')) || '';
-    const dataPiket = (typeof dataDariSpreadsheet !== 'undefined' && dataDariSpreadsheet.piket) ? dataDariSpreadsheet.piket[namaUserPiket] : null;
-
-    const elPiketHadir = document.getElementById("val-piket-hadir");
-    const elPiketGanti = document.getElementById("val-piket-ganti");
-
-    if (elPiketHadir && elPiketGanti) {
-        if (dataPiket) {
-            elPiketHadir.innerText = (dataPiket.hadir || 0) + " Kali";
-            elPiketGanti.innerText = (dataPiket.digantikan || 0) + " Kali";
-        } else {
-            elPiketHadir.innerText = "0 Kali";
-            elPiketGanti.innerText = "0 Kali";
-        }
-    }
-
-    // --- BAGIAN 4: ABSENSI ---
+    // BAGIAN 4: ABSENSI
     const dataAbsen = dataDariSpreadsheet.absensi?.[namaGuru];
     const elAbsensi = document.getElementById("val-absensi");
 
@@ -1389,12 +1233,12 @@ async function bukaLaporan() {
         }
     }
 
-    // --- BAGIAN 5 & 6: STATUS INPUT & REKAP KELAS ---
+    // BAGIAN 5 & 6: STATUS INPUT & REKAP KELAS
     const divInput = document.getElementById('card-status-input'); 
     const divRekap = document.getElementById('row-rekap-kelas');   
 
-    if(divInput) divInput.style.display = 'none';
-    if(divRekap) divRekap.style.display = 'none';
+    if (divInput) divInput.style.display = 'none';
+    if (divRekap) divRekap.style.display = 'none';
 
     if (dataDariSpreadsheet && dataDariSpreadsheet.biodata && dataDariSpreadsheet.rekapKelas) {
         let infoGuru = dataDariSpreadsheet.biodata[namaGuru];
@@ -1417,7 +1261,7 @@ async function bukaLaporan() {
             const semuaNilaiBiodataClean = bersihkanTotal(semuaNilaiBiodata);
             const daftarKelas = Object.keys(dataDariSpreadsheet.rekapKelas);
 
-            let kelaemukan = null;
+            let kelasDitemukan = null;
             let dataKelas = null;
 
             for (let i = 0; i < daftarKelas.length; i++) {
@@ -1425,14 +1269,14 @@ async function bukaLaporan() {
                 let namaKelasClean = bersihkanTotal(namaKelasAsli);
 
                 if (namaKelasClean && semuaNilaiBiodataClean.includes(namaKelasClean)) {
-                    kelaemukan = namaKelasAsli;
+                    kelasDitemukan = namaKelasAsli;
                     dataKelas = dataDariSpreadsheet.rekapKelas[namaKelasAsli];
                     break;
                 }
             }
 
-            if (kelaemukan && dataKelas) {
-                if(divInput) {
+            if (kelasDitemukan && dataKelas) {
+                if (divInput) {
                     divInput.style.display = 'block';
                     let jumlahIsi = parseInt(dataKelas.jumlahInput) || 0; 
                     
@@ -1441,22 +1285,22 @@ async function bukaLaporan() {
                     const elCardInput = document.getElementById('card-status-input');
 
                     if (jumlahIsi === 0) {
-                        if(elStatusVal) { elStatusVal.innerText = "BELUM MENGISI"; elStatusVal.style.color = "#e74c3c"; }
-                        if(elStatusMsg) elStatusMsg.innerText = "Anda belum mengisi kehadiran siswa hari ini.";
-                        if(elCardInput) elCardInput.style.borderLeftColor = "#e74c3c"; 
+                        if (elStatusVal) { elStatusVal.innerText = "BELUM MENGISI"; elStatusVal.style.color = "#e74c3c"; }
+                        if (elStatusMsg) elStatusMsg.innerText = "Anda belum mengisi kehadiran siswa hari ini.";
+                        if (elCardInput) elCardInput.style.borderLeftColor = "#e74c3c"; 
                     } else if (jumlahIsi === 1) {
-                        if(elStatusVal) { elStatusVal.innerText = "SUDAH MENGISI"; elStatusVal.style.color = "#27ae60"; }
-                        if(elStatusMsg) elStatusMsg.innerText = "Terima kasih, data kehadiran hari ini aman.";
-                        if(elCardInput) elCardInput.style.borderLeftColor = "#27ae60";
+                        if (elStatusVal) { elStatusVal.innerText = "SUDAH MENGISI"; elStatusVal.style.color = "#27ae60"; }
+                        if (elStatusMsg) elStatusMsg.innerText = "Terima kasih, data kehadiran hari ini aman.";
+                        if (elCardInput) elCardInput.style.borderLeftColor = "#27ae60";
                     } else {
-                        if(elStatusVal) { elStatusVal.innerText = "DOUBLE INPUT (" + jumlahIsi + ")"; elStatusVal.style.color = "#f39c12"; }
-                        if(elStatusMsg) elStatusMsg.innerText = "Anda mengisi lebih dari 1 jurnal kelas hari ini.";
-                        if(elCardInput) elCardInput.style.borderLeftColor = "#f39c12";
+                        if (elStatusVal) { elStatusVal.innerText = "DOUBLE INPUT (" + jumlahIsi + ")"; elStatusVal.style.color = "#f39c12"; }
+                        if (elStatusMsg) elStatusMsg.innerText = "Anda mengisi lebih dari 1 jurnal kelas hari ini.";
+                        if (elCardInput) elCardInput.style.borderLeftColor = "#f39c12";
                     }
                 }
 
-                if(divRekap) {
-                    window.kelasAktif = kelaemukan;
+                if (divRekap) {
+                    window.kelasAktif = kelasDitemukan;
                     divRekap.style.display = 'block';
                     
                     const elLabel = document.getElementById('label-rekap-kelas');
@@ -1464,80 +1308,30 @@ async function bukaLaporan() {
                     const elBar = document.getElementById('bar-rekap-kelas');
                     const elDetail = document.getElementById('detail-rekap-kelas');
     
-                    if(elLabel) elLabel.textContent = "Rekap Kehadiran " + kelasDitemukan;
+                    if (elLabel) elLabel.textContent = "Rekap Kehadiran " + kelasDitemukan;
                     
                     var teksTampil = dataKelas.tampilan || "0%";
                     var lebarBar = dataKelas.persen || "0%";
     
-                    if(elVal) elVal.textContent = teksTampil;
-                    if(elBar) {
+                    if (elVal) elVal.textContent = teksTampil;
+                    if (elBar) {
                         elBar.style.width = lebarBar;
                         if (parseFloat(lebarBar) < 75) {
                             elBar.style.backgroundColor = "#e74c3c";
-                            if(elDetail) elDetail.textContent = "Perlu Perhatian";
+                            if (elDetail) elDetail.textContent = "Perlu Perhatian";
                         } else {
                             elBar.style.backgroundColor = "#27ae60";
-                            if(elDetail) elDetail.textContent = "Sangat Baik";
+                            if (elDetail) elDetail.textContent = "Sangat Baik";
                         }
                     }
                 }
             }
         }
     }
-}
-
-// ==========================================
-// FUNGSI BUKA & TUTUP MODAL T2Q (HARUS DI LUAR bukaLaporan)
-// ==========================================
-window.bukaRincianJurnalT2Q = function() {
-    const modal = document.getElementById('modalRincianJurnalT2Q');
-    const tbody = document.getElementById('tabel-body-jurnal-t2q');
-    const elNama = document.getElementById('nama-guru-jurnal-t2q');
-
-    if (!modal || !tbody) return;
-
-    const namaUser = (typeof namaGuru !== 'undefined' ? namaGuru : localStorage.getItem('namaGuru')) || '';
-    if (elNama) elNama.innerText = namaUser;
-
-    const sumberData = (typeof dataDariSpreadsheet !== 'undefined' && dataDariSpreadsheet) ? dataDariSpreadsheet : (typeof globalData !== 'undefined' ? globalData : {});
-    const mapT2Q = sumberData.rincianJurnalT2Q || {};
-    const dataT2Q = mapT2Q[namaUser] || null;
-
-    tbody.innerHTML = '';
-
-    if (dataT2Q && dataT2Q.length > 0) {
-        dataT2Q.forEach(function(item) {
-            const tr = document.createElement('tr');
-            let valPersen = parseFloat(String(item.persen).replace(',', '.').replace('%', '')) || 0;
-            let colorPersen = valPersen >= 100 ? '#27ae60' : '#e74c3c';
-
-            tr.innerHTML = `
-                <td style="padding: 10px; border: 1px solid #ddd;"><b>${item.bulan}</b></td>
-                <td style="padding: 10px; border: 1px solid #ddd;">${item.wajib}</td>
-                <td style="padding: 10px; border: 1px solid #ddd;">${item.realisasi}</td>
-                <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; color: ${colorPersen};">${item.persen}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-    } else {
-        tbody.innerHTML = '<tr><td colspan="4" style="padding: 15px; color: #7f8c8d;">Data rincian T2Q tidak ditemukan.</td></tr>';
-    }
-
-    modal.style.display = 'block';
-};
-
-window.tutupRincianJurnalT2Q = function() {
-    const modal = document.getElementById('modalRincianJurnalT2Q');
-    if (modal) modal.style.display = 'none';
-};
-
-window.tutupLaporan = function() {
-    const modal = document.getElementById("modalLaporanKinerja") || document.getElementById("modalLaporan");
-    if (modal) modal.style.display = "none";
 };
 
 // ==========================================
-// LOGIKA TAMPILAN BIODATA - DIDAFTARKAN KE WINDOW
+// LOGIKA TAMPILAN BIODATA
 // ==========================================
 window.bukaBiodata = function() {
     if (!dataDariSpreadsheet) {
@@ -1549,40 +1343,48 @@ window.bukaBiodata = function() {
     if (modal) modal.style.display = "block";
 
     const bio = dataDariSpreadsheet.biodata[namaGuru];
-    document.getElementById("bio-nama").innerText = namaGuru; 
+    const elNama = document.getElementById("bio-nama");
+    if (elNama) elNama.innerText = namaGuru; 
 
     if (bio) {
         const formatTanggal = (strTgl) => {
-            if(!strTgl) return "-";
+            if (!strTgl) return "-";
             let date = new Date(strTgl);
-            if(isNaN(date)) return strTgl; 
+            if (isNaN(date)) return strTgl; 
             return date.toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'});
         };
 
-        document.getElementById("bio-nip").innerText = bio.nip || "-";
-        document.getElementById("bio-nuptk").innerText = bio.nuptk || "-";
-        document.getElementById("bio-nik").innerText = bio.nik || "-";
-        document.getElementById("bio-jabatan").innerText = bio.jabatan || "-";
-        document.getElementById("bio-tugas").innerText = bio.tugasTambahan || "-";
-        document.getElementById("bio-status").innerText = bio.statusPegawai || "-";
-        document.getElementById("bio-tmt").innerText = bio.tmt || "-";
-        document.getElementById("bio-sertifikasi").innerText = bio.sertifikasi || "-";
+        const setVal = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.innerText = val || "-";
+        };
+
+        setVal("bio-nip", bio.nip);
+        setVal("bio-nuptk", bio.nuptk);
+        setVal("bio-nik", bio.nik);
+        setVal("bio-jabatan", bio.jabatan);
+        setVal("bio-tugas", bio.tugasTambahan);
+        setVal("bio-status", bio.statusPegawai);
+        setVal("bio-tmt", bio.tmt);
+        setVal("bio-sertifikasi", bio.sertifikasi);
         
         let ttl = (bio.tempatLahir || "") + ", " + formatTanggal(bio.tglLahir);
-        document.getElementById("bio-ttl").innerText = ttl;
+        setVal("bio-ttl", ttl);
         
-        document.getElementById("bio-jk").innerText = bio.jk || "-";
-        document.getElementById("bio-agama").innerText = bio.agama || "-";
-        document.getElementById("bio-alamat").innerText = bio.alamat || "-";
+        setVal("bio-jk", bio.jk);
+        setVal("bio-agama", bio.agama);
+        setVal("bio-alamat", bio.alamat);
     } else {
-        document.getElementById("bio-nip").innerText = "Data Belum Tersedia";
-        document.getElementById("bio-nuptk").innerText = "-";
+        const elNip = document.getElementById("bio-nip");
+        const elNuptk = document.getElementById("bio-nuptk");
+        if (elNip) elNip.innerText = "Data Belum Tersedia";
+        if (elNuptk) elNuptk.innerText = "-";
     }
 };
 
 window.tutupBiodata = function() {
     const modal = document.getElementById("modalBiodata");
-    if(modal) modal.style.display = "none";
+    if (modal) modal.style.display = "none";
 };
 
 window.logout = function() {
@@ -1592,14 +1394,13 @@ window.logout = function() {
 
 function showDate() {
     const dateElement = document.getElementById('display-tanggal');
-    if(dateElement) {
+    if (dateElement) {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         const today = new Date();
         dateElement.innerText = today.toLocaleDateString('id-ID', options);
     }
 }
 showDate();
-
 
 // ==========================================
 // LOGIKA UBAH PASSWORD
@@ -1628,18 +1429,18 @@ window.prosesUbahPassword = function() {
     }
 
     if (elPassBaru.value !== elPassKonfirmasi.value) {
-        if(elMsgError) elMsgError.style.display = 'block';
+        if (elMsgError) elMsgError.style.display = 'block';
         showPopup("Gagal", "Password tidak sama! Cek ketikan Anda.", "❌");
         elPassKonfirmasi.value = "";
         elPassKonfirmasi.focus();
         return;
     } else {
-        if(elMsgError) elMsgError.style.display = 'none';
+        if (elMsgError) elMsgError.style.display = 'none';
     }
 
     const loadingOverlay = document.getElementById('loading-overlay');
-    if(loadingOverlay) loadingOverlay.style.display = 'flex';
-    tutupModalPassword();
+    if (loadingOverlay) loadingOverlay.style.display = 'flex';
+    window.tutupModalPassword();
 
     const formData = new FormData();
     formData.append('action', 'ubahPassword');
@@ -1649,7 +1450,7 @@ window.prosesUbahPassword = function() {
     fetch(API_, { method: 'POST', body: formData })
     .then(response => response.json())
     .then(data => {
-        if(loadingOverlay) loadingOverlay.style.display = 'none';
+        if (loadingOverlay) loadingOverlay.style.display = 'none';
         if (data.status === "sukses") {
             showPopup("Berhasil", "Password diganti! Logout otomatis...", "✅");
             setTimeout(() => {
@@ -1661,7 +1462,7 @@ window.prosesUbahPassword = function() {
         }
     })
     .catch(error => {
-        if(loadingOverlay) loadingOverlay.style.display = 'none';
+        if (loadingOverlay) loadingOverlay.style.display = 'none';
         showPopup("Error", "Gagal koneksi server.", "🚫");
     });
 };
@@ -1674,19 +1475,19 @@ window.bukaPopupAbsensi = function() {
     if (!kelas) {
         try {
             var label = document.getElementById('label-rekap-kelas').textContent;
-            if(label) kelas = label.replace("Rekap Kehadiran ", "").trim();
+            if (label) kelas = label.replace("Rekap Kehadiran ", "").trim();
         } catch (e) {}
     }
     if (!kelas) { alert("Kelas tidak ditemukan. Refresh halaman."); return; }
 
     var modal = document.getElementById('modalDetailAbsensi');
-    if(modal) modal.style.display = 'flex'; // Dikembalikan ke block agar tidak kejang
+    if (modal) modal.style.display = 'flex';
     
     var elJudul = document.getElementById('judulDetailKelas');
-    if(elJudul) elJudul.innerText = "Detail: " + kelas;
+    if (elJudul) elJudul.innerText = "Detail: " + kelas;
     
     var tbody = document.getElementById('isiTabelAbsensi');
-    if(tbody) tbody.innerHTML = '<tr><td colspan="6" style="padding:20px; text-align:center;">Sedang mengambil data... <br>⏳ Mohon tunggu...</td></tr>';
+    if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="padding:20px; text-align:center;">Sedang mengambil data... <br>⏳ Mohon tunggu...</td></tr>';
 
     var urlTujuan = "https://script.google.com/macros/s/AKfycbwqC7MvEayos9s8IdYbcoXF488iQ09-LneUD0DvawKUf6AYIUWPOaI0NvMfNEMQP6JVBA/exec";
     var fullUrl = urlTujuan + "?action=getRekapDetail&kelas=" + encodeURIComponent(kelas);
@@ -1714,10 +1515,10 @@ window.bukaPopupAbsensi = function() {
                 </tr>`;
             });
         }
-        if(tbody) tbody.innerHTML = html;
+        if (tbody) tbody.innerHTML = html;
     })
     .catch(error => {
-        if(tbody) tbody.innerHTML = '<tr><td colspan="6" style="color:red; padding:20px; text-align:center;">Gagal mengambil data.</td></tr>';
+        if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="color:red; padding:20px; text-align:center;">Gagal mengambil data.</td></tr>';
     });
 };
 
@@ -1789,7 +1590,7 @@ window.bukaRincianJurnal = function() {
         tbody.innerHTML = "<tr><td colspan='4' style='padding:20px; text-align:center; color:#7f8c8d;'>Belum ada data jurnal.</td></tr>";
     }
 
-    if (modalRincian) modalRincian.style.display = "block"; // <-- Gunakan block
+    if (modalRincian) modalRincian.style.display = "block";
 };
 
 window.tutupRincianJurnal = function() {
@@ -1798,7 +1599,7 @@ window.tutupRincianJurnal = function() {
 };
 
 // ==========================================
-// TUTUP MODAL KETIKA KLIK AREA GELAP (DISATUKAN AGAR RINGAN)
+// TUTUP MODAL KETIKA KLIK AREA GELAP (GLOBAL EVENT LISTENER)
 // ==========================================
 window.addEventListener('click', function(event) {
     const daftarmodal = [
@@ -1818,207 +1619,6 @@ window.addEventListener('click', function(event) {
         }
     });
 });
-
-        // ==========================================
-// --- LOGIKA OTOMATIS MENU T2Q & PROGRES SISWA ---
-// ==========================================
-
-const GAS_API_URL = "https://script.google.com/macros/s/AKfycbzwrfVGzMHmlWUxr9NZl8lp2j_YshyDHHVO9QpEuBvJQKfqa8QQKDfOCgiRZqCPqmWN/exec";
-
-// OTOMATISASI: Kunci URL ke memori browser agar Pop-up Konfigurasi TIDAK PERNAH muncul
-try {
-    localStorage.setItem('gas_url', GAS_API_URL);
-    localStorage.setItem('gasUrl', GAS_API_URL);
-    localStorage.setItem('scriptUrl', GAS_API_URL);
-    localStorage.setItem('appUrl', GAS_API_URL);
-} catch (e) {
-    console.warn("Gagal menyimpan URL ke localStorage:", e);
-}
-
-let rawMasterData = [];
-
-// Inisialisasi Otomatis saat Halaman Selesai Dimuat
-document.addEventListener("DOMContentLoaded", () => {
-    // 1. Sembunyikan dan paksa tutup Modal Konfigurasi URL jika elemennya ada di HTML
-    const modalKonfigList = document.querySelectorAll('#modal-konfigurasi, #modalKonfigurasi, .modal-konfigurasi, [id*="config"]');
-    modalKonfigList.forEach(modal => {
-        modal.style.display = 'none';
-        modal.classList.add('hidden');
-    });
-
-    // 2. Setup Tombol & Filter Menu T2Q
-    initMenuT2Q();
-
-    // 3. Langsung Ambil Data Master (Kelas & Pengampu) dari Sheets tanpa Minta URL
-    fetchInitialData();
-});
-
-// 1. Fungsi Pembantu: Memeriksa Data Guru secara Aman
-function getBioGuru() {
-    if (typeof bio !== 'undefined' && bio) return bio;
-    if (typeof dataGuru !== 'undefined' && dataGuru) return dataGuru;
-    if (typeof userData !== 'undefined' && userData) return userData;
-    try {
-        const localData = localStorage.getItem('user') || localStorage.getItem('bio') || localStorage.getItem('dataGuru');
-        if (localData) return JSON.parse(localData);
-    } catch(e) {}
-    return {};
-}
-
-// 2. Fungsi Pembantu: Mengambil Nama Guru Log In
-function getNamaGuruLogin() {
-    const dataBio = getBioGuru();
-    let nama = dataBio.nama || dataBio.namaLengkap || dataBio.namaGuru || "";
-
-    if (!nama) {
-        const bodyText = document.body.innerText;
-        const match = bodyText.match(/Selamat Datang,?\s*\n?\s*([^\n\r]+)/i);
-        if (match && match[1]) {
-            nama = match[1].trim();
-        }
-    }
-    return nama;
-}
-
-// 3. Inisialisasi Tampilan Tombol T2Q
-function initMenuT2Q() {
-    const tombolT2Q = document.getElementById('menu-t2q');
-    if (tombolT2Q) { 
-        const dataBio = getBioGuru();
-        let mapelGuru = String(dataBio.mataPelajaran || dataBio.mapel || "").toUpperCase();
-
-        if (mapelGuru.includes("T2Q") || mapelGuru.includes("TAHSIN") || mapelGuru.includes("TAHFIDZ") || mapelGuru === "") {
-            tombolT2Q.style.display = "flex"; 
-        } else {
-            tombolT2Q.style.display = "none"; 
-        }
-    }
-}
-
-// 4. Ambil Data Master untuk Populasi Dropdown Kelas & Pengampu Utama
-async function fetchInitialData() {
-    const statusEl = document.getElementById("status-text") || document.getElementById("status");
-    if (statusEl) statusEl.textContent = "Memuat data kelas...";
-
-    try {
-        const response = await fetch(`${GAS_API_URL}?action=getInitialData`);
-        const result = await response.json();
-
-        if (result.status === "success") {
-            rawMasterData = result.data;
-            populateKelasDropdown();
-            if (statusEl) statusEl.textContent = "Ready";
-        } else {
-            console.error("Gagal memuat data master:", result.message);
-        }
-    } catch (err) {
-        console.error("Kesalahan koneksi saat memuat data master:", err);
-    }
-}
-
-// Fill Dropdown Kelas secara Otomatis
-function populateKelasDropdown() {
-    const kelasSelect = document.getElementById("kelas");
-    if (!kelasSelect || !rawMasterData.length) return;
-
-    const uniqueKelas = [...new Set(rawMasterData.map(item => item.kelas))];
-    kelasSelect.innerHTML = '<option value="">-- Pilih Kelas --</option>';
-    uniqueKelas.forEach(k => {
-        kelasSelect.innerHTML += `<option value="${k}">${k}</option>`;
-    });
-}
-
-// 5. Function Buka Modal & Fetch Data Rekap T2Q Siswa
-async function bukaProgresT2Q(event) {
-    if (event) event.stopPropagation();
-
-    const modal = document.getElementById('modal-progres-t2q');
-    const modalBody = document.getElementById('modal-body-t2q');
-    
-    if (modal) modal.style.display = 'flex';
-    if (modalBody) modalBody.innerHTML = '<p style="text-align:center; padding: 20px;">⏳ Memuat data progres T2Q siswa...</p>';
-
-    try {
-        const response = await fetch(`${GAS_API_URL}?action=getRekap`);
-        const result = await response.json();
-
-        if (result.status === "success") {
-            const namaGuruLogin = getNamaGuruLogin().toLowerCase().trim();
-
-            const dataFiltered = result.data.filter(siswa => {
-                const pengampu = (siswa.pengampu || "").toLowerCase().trim();
-                if (!namaGuruLogin || !pengampu) return false;
-                
-                return pengampu.includes(namaGuruLogin) || namaGuruLogin.includes(pengampu);
-            });
-
-            renderTabelProgresT2Q(dataFiltered);
-        } else {
-            if (modalBody) modalBody.innerHTML = `<p style="color:red; text-align:center; padding:20px;">Gagal mengambil data: ${result.message}</p>`;
-        }
-    } catch (err) {
-        if (modalBody) modalBody.innerHTML = `<p style="color:red; text-align:center; padding:20px;">Terjadi kesalahan sistem: ${err.message}</p>`;
-    }
-}
-
-// 6. Render Tabel Hasil Filter Siswa
-function renderTabelProgresT2Q(data) {
-    const modalBody = document.getElementById('modal-body-t2q');
-    if (!modalBody) return;
-
-    if (data.length === 0) {
-        modalBody.innerHTML = '<p style="text-align:center; color:#777; padding:20px;">Belum ada data progres siswa yang diampu oleh Anda.</p>';
-        return;
-    }
-
-    let htmlTable = `
-        <table class="t2q-table">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama Siswa</th>
-                    <th>NIPD / Kelas</th>
-                    <th>JK</th>
-                    <th>Tahsin</th>
-                    <th>Ket. Tahsin</th>
-                    <th>Tahfidz</th>
-                    <th>Ket. Tahfidz</th>
-                    <th>Pengampu</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-
-    data.forEach((row, index) => {
-        htmlTable += `
-            <tr>
-                <td>${index + 1}</td>
-                <td><b>${row.nama}</b></td>
-                <td>${row.nipdKelas}</td>
-                <td>${row.jk}</td>
-                <td>${row.tahsin || '-'}</td>
-                <td>${row.ketTahsin || '-'}</td>
-                <td>${row.tahfidz || '-'}</td>
-                <td>${row.ketTahfidz || '-'}</td>
-                <td>${row.pengampu}</td>
-            </tr>
-        `;
-    });
-
-    htmlTable += `
-            </tbody>
-        </table>
-    `;
-
-    modalBody.innerHTML = htmlTable;
-}
-
-// 7. Function Tutup Modal
-function tutupModalProgresT2Q() {
-    const modal = document.getElementById('modal-progres-t2q');
-    if (modal) modal.style.display = 'none';
-}
-        
 </script>
 
 </body>
